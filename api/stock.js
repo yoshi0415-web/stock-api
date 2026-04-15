@@ -6,7 +6,7 @@ export default async function handler(req, res) {
       "https://api.jquants.com/v2/eq/bars/daily?code=7203",
       {
         headers: {
-          Authorization: `Bearer ${apiKey}`
+          "X-API-KEY": apiKey
         }
       }
     );
