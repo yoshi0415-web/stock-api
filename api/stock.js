@@ -1,32 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+export default async function handler(req, res) {
+  try {
+    const apiKey = process.env.JQUANTS_API_KEY;
 
-<canvas id="chart"></canvas>
+    if (!apiKey) {
+      return res.status(500).json({ error: "APIキーが設定されていません" });
+    }
 
-<script>
-fetch("https://stock-api-weld-three.vercel.app/api/stock")
-  .then(res => res.json())
-  .then(data => {
-    const d = data.data[0];
-
-    const chart = new Chart(document.getElementById("chart"), {
-      type: "bar",
-      data: {
-        labels: [d.Date],
-        datasets: [
-          {
-            label: "株価（終値）",
-            data: [d.C]
-          }
-        ]
+    const response = await fetch(
+      "https://api.jquants.com/v2/equities/bars/daily?code=72030&date=20240122",
+      {
+        headers: {
+          "x-api-key": apiKey
+        }
       }
-    });
-  });
-</script>
+    );
 
-</body>
-</html>
+    const data = await response.json();
+
+    // 👇 ここ追加（超重要）
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    res.status(200).json(data);
+
+  } catch (error) {
+    res.status(500).json({
+      error: "サーバーエラー",
+      detail: error.message
+    });
+  }
+}
