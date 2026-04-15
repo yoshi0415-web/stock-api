@@ -2,6 +2,10 @@ export default async function handler(req, res) {
   try {
     const apiKey = process.env.JQUANTS_API_KEY;
 
+    if (!apiKey) {
+      return res.status(500).json({ error: "APIキーが設定されていません" });
+    }
+
     const response = await fetch(
       "https://api.jquants.com/v2/prices/daily_quotes?code=7203",
       {
