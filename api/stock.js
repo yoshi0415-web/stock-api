@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     }
 
     const response = await fetch(
-      "https://api.jquants.com/v2/prices/daily_quotes?code=7203.T",
+      "https://api.jquants.com/v2/markets/trading_calendar",
       {
         headers: {
           "X-API-KEY": apiKey
