@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     }
 
     const response = await fetch(
-      "https://api.jquants.com/v2/equities/bars/daily?code=72030&date=20240104",
+      "https://api.jquants.com/v2/equities/bars/daily?code=72030&date=20240122",
       {
         headers: {
           "x-api-key": apiKey
