@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-  const email = "あなたのメール";
-  const password = "あなたのパスワード";
+  const email = "yoridaiiti@gmail.com";
+  const password = "Ny030410";
 
   // ① リフレッシュトークン取得
   const refreshRes = await fetch("https://api.jquants.com/v1/token/auth_user", {
