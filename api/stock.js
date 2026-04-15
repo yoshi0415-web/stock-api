@@ -1,9 +1,9 @@
 export default async function handler(req, res) {
   try {
-    const apiKey = "wFr-p-IwByiALQ4v7yU15oZGaazO9Bn49ouXgsXqixo";
+    const apiKey = process.env.JQUANTS_API_KEY;
 
     const response = await fetch(
-      "https://api.jquants.com/v2/eq/bars/daily?code=7203",
+      "https://api.jquants.com/v2/prices/daily_quotes?code=7203",
       {
         headers: {
           "X-API-KEY": apiKey
