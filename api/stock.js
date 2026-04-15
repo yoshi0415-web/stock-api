@@ -1,33 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+export default async function handler(req, res) {
+  try {
+    const apiKey = process.env.JQUANTS_API_KEY;
 
-<canvas id="chart"></canvas>
+    if (!apiKey) {
+      return res.status(500).json({ error: "APIキー未設定" });
+    }
 
-<script>
-fetch("https://stock-api-weld-three.vercel.app/api/stock")
-  .then(res => res.json())
-  .then(data => {
-    const prices = data.data;
-
-    const labels = prices.map(d => d.Date);
-    const close = prices.map(d => d.C);
-
-    new Chart(document.getElementById("chart"), {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [{
-          label: "トヨタ株価",
-          data: close
-        }]
+    const response = await fetch(
+      "https://api.jquants.com/v2/equities/bars/daily?code=72030&date=20240122",
+      {
+        headers: {
+          "x-api-key": apiKey
+        }
       }
-    });
-  });
-</script>
+    );
 
-</body>
-</html>
+    const data = await response.json();
+
+    // 👇 APIエラー処理
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    // 👇 データ存在チェック（超重要）
+    if (!data.data || data.data.length === 0) {
+      return res.status(200).json({
+        message: "データなし",
+        data: []
+      });
+    }
+
+    res.status(200).json(data);
+
+  } catch (error) {
+    res.status(500).json({
+      error: "サーバーエラー",
+      detail: error.message
+    });
+  }
+}
