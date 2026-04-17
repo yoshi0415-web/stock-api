@@ -19,13 +19,14 @@
 <input id="code" placeholder="銘柄コード">
 <button onclick="loadChart()">表示</button>
 
-<canvas id="chart"></canvas>
-  
+<canvas id="chart" width="400" height="300"></canvas>
+
 <script src="script.js"></script>
 
 <script>
-navigator.serviceWorker.register('/sw.js')
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+}
 </script>
-  
 </body>
 </html>
