@@ -5,8 +5,11 @@ export default async function handler(req, res) {
   try {
     const apiKey = process.env.JQUANTS_API_KEY;
 
+    // 👇 追加
+    const code = req.query.code || "7203";
+
     const response = await fetch(
-      "https://api.jquants.com/v2/equities/bars/daily?code=72030&from=20240125&to=20240130",
+      `https://api.jquants.com/v2/equities/bars/daily?code=${code}0&from=20240125&to=20240130`,
       {
         headers: {
           "x-api-key": apiKey
