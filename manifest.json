@@ -1,6 +1,6 @@
 {
-  "name": "株価チャート",
-  "short_name": "株チャート",
+  "name": "株ツリー",
+  "short_name": "株ツリー"
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
