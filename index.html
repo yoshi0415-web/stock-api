@@ -27,23 +27,39 @@
 <!-- <p class="app-subtitle">v1.0.0</p> -->
     </header>
 
-    <section class="controls">
-      <input
-        id="code"
-        class="code-input"
-        type="text"
-        inputmode="numeric"
-        placeholder="銘柄コード（例: 7203）"
-      >
-<button id="showButton" class="show-button" type="button">
-  表示
-</button>
+<section class="controls">
+  <input
+    id="code"
+    class="code-input"
+    type="text"
+    inputmode="numeric"
+    placeholder="銘柄コード（例: 7203）"
+  >
 
-<button id="reloadButton" class="show-button" type="button">
-  更新
-</button>
+  <input
+    id="from"
+    class="code-input"
+    type="text"
+    inputmode="numeric"
+    placeholder="開始日（例: 20240125）"
+  >
 
-    </section>
+  <input
+    id="to"
+    class="code-input"
+    type="text"
+    inputmode="numeric"
+    placeholder="終了日（例: 20240130）"
+  >
+
+  <button id="showButton" class="show-button" type="button">
+    表示
+  </button>
+
+  <button id="reloadButton" class="show-button" type="button">
+    更新
+  </button>
+</section>
 
 <section class="filters">
   <button id="risingButton" class="show-button" type="button">上昇中</button>
