@@ -1,5 +1,6 @@
+alert("script.js 読み込みOK");
+
 document.addEventListener("DOMContentLoaded", () => {
-  alert("script.js 読み込みOK");
 
   let chart = null;
 
