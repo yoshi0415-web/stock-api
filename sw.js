@@ -1,8 +1,9 @@
-const CACHE_NAME = "kabutree-cache-v1";
+const CACHE_NAME = "kabutree-cache-v1.0.0";
 
 const STATIC_FILES = [
   "/",
   "/index.html",
+  "/style.css",
   "/script.js",
   "/manifest.json",
   "/icon1.0.PNG"
@@ -29,14 +30,13 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
 
+  // APIはキャッシュしない
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(fetch(event.request));
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      return cachedResponse || fetch(event.request);
-    })
+    caches.match(event.request).then(res => res || fetch(event.request))
   );
 });
