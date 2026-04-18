@@ -1,6 +1,8 @@
 let chart = null;
 
 const codeInput = document.getElementById("code");
+const fromInput = document.getElementById("from");
+const toInput = document.getElementById("to");
 const showButton = document.getElementById("showButton");
 const reloadButton = document.getElementById("reloadButton");
 const risingButton = document.getElementById("risingButton");
@@ -92,6 +94,6 @@ function showRisingStocks() {
       loadChart();
     });
 
-    resultList.appendChild(li);
+    resultList.appendChild(li);、
   }
 }
