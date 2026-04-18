@@ -85,13 +85,13 @@ function showRisingStocks() {
 
   for (const code of WATCH_CODES) {
     const li = document.createElement("li");
-li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;li.textContent = code;
+    li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
 
-li.addEventListener("click", () => {
-  codeInput.value = code;
-  loadChart();
-});
+    li.addEventListener("click", () => {
+      codeInput.value = code;
+      loadChart();
+    });
 
-resultList.appendChild(li);
+    resultList.appendChild(li);
   }
 }
