@@ -97,8 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } catch (error) {
-      console.error(error);
-      alert("通信エラー");
+  console.error(error);
+  alert("通信エラー: " + error.message);
+}
     }
   }
 
