@@ -5,78 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>株ツリー</title>
 
-  <!-- アイコン -->
   <link rel="apple-touch-icon" href="icon1.0.PNG">
   <link rel="icon" href="icon1.0.PNG">
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css?v=1.0.1">
+  <link rel="stylesheet" href="style.css?v=1.0.10">
 
-　<!-- Chart.js -->
-　<script src="script.js?v=1.0.10"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
   <main class="app">
     <header class="app-header">
       <h1 class="app-title">🌳 株ツリー</h1>
-<!-- <p class="app-subtitle">v1.0.0</p> -->
     </header>
 
-<section class="controls">
-  <input
-    id="code"
-    class="code-input"
-    type="text"
-    inputmode="numeric"
-    placeholder="銘柄コード（例: 7203）"
-  >
+    <section class="controls">
+      <input
+        id="code"
+        class="code-input"
+        type="text"
+        inputmode="numeric"
+        placeholder="銘柄コード（例: 7203）"
+      >
 
-  <input
-    id="from"
-    class="code-input"
-    type="text"
-    inputmode="numeric"
-    placeholder="開始日（例: 20240125）"
-  >
+      <input
+        id="from"
+        class="code-input"
+        type="text"
+        inputmode="numeric"
+        placeholder="開始日（例: 20240125）"
+      >
 
-  <input
-    id="to"
-    class="code-input"
-    type="text"
-    inputmode="numeric"
-    placeholder="終了日（例: 20240130）"
-  >
+      <input
+        id="to"
+        class="code-input"
+        type="text"
+        inputmode="numeric"
+        placeholder="終了日（例: 20240130）"
+      >
 
-  <button id="showButton" class="show-button" type="button">
-    表示
-  </button>
+      <button id="showButton" class="show-button" type="button">
+        表示
+      </button>
 
-  <button id="reloadButton" class="show-button" type="button">
-    更新
-  </button>
-</section>
+      <button id="reloadButton" class="show-button" type="button">
+        更新
+      </button>
+    </section>
 
-<section class="filters">
-  <button id="risingButton" class="show-button" type="button">上昇中</button>
-</section>
+    <section class="filters">
+      <button id="risingButton" class="show-button" type="button">上昇中</button>
+    </section>
 
-<section class="result-section">
-  <h2>候補銘柄</h2>
-  <ul id="resultList"></ul>
-</section>
+    <section class="result-section">
+      <h2>候補銘柄</h2>
+      <ul id="resultList"></ul>
+    </section>
 
     <section class="chart-section">
       <canvas id="chart" width="400" height="300"></canvas>
     </section>
   </main>
 
-  <script src="script.js?v=1.0.0"></script>
+  <script src="script.js?v=1.0.10"></script>
 
   <script>
     if ("serviceWorker" in navigator) {
