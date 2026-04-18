@@ -50,7 +50,18 @@ async function loadChart() {
       return;
     }
 
-    const prices = data.data;
+    let prices = data.data;
+
+const from = fromInput.value.trim();
+const to = toInput.value.trim();
+
+if (from) {
+  prices = prices.filter(item => item.Date.replaceAll("-", "") >= from);
+}
+
+if (to) {
+  prices = prices.filter(item => item.Date.replaceAll("-", "") <= to);
+}
     const labels = prices.map(item => item.Date);
     const closePrices = prices.map(item => item.C);
 
