@@ -10,25 +10,34 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
 
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+  }
+
+  canvas {
+    max-width: 100%;
+  }
+</style>
+
 </head>
 <body>
 
 <h2>🌳 株ツリー</h2>
 
-<input id="code" placeholder="銘柄コード">
+<input id="code" placeholder="銘柄コード（例:7203）">
 <button onclick="loadChart()">表示</button>
+
+<br><br>
 
 <canvas id="chart" width="400" height="300"></canvas>
 
+<!-- あなたのJS -->
 <script src="script.js"></script>
 
-<script>
-navigator.serviceWorker.getRegistrations().then(registrations => {
-  for (let reg of registrations) {
-    reg.unregister();
-  }
-});
-</script>
 </body>
 </html>
