@@ -28,6 +28,8 @@ reloadButton.addEventListener("click", () => {
 
 risingButton.addEventListener("click", showRisingStocks);
 
+alert("ボタン設定までOK");
+
 codeInput.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
     loadChart();
