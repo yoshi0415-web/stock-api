@@ -10,77 +10,34 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
 
+  <link rel="stylesheet" href="style.css">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 24px 16px;
-      background: #ffffff;
-      color: #222222;
-    }
-
-    h1 {
-      margin: 0 0 24px;
-      font-size: 28px;
-    }
-
-    .controls {
-      margin-bottom: 24px;
-    }
-
-    input {
-      width: 180px;
-      max-width: 80%;
-      padding: 10px 12px;
-      font-size: 16px;
-      margin-right: 8px;
-      border: 1px solid #cccccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-
-    button {
-      padding: 10px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #222222;
-      color: #ffffff;
-    }
-
-    button:active {
-      opacity: 0.8;
-    }
-
-    .chart-wrap {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    canvas {
-      max-width: 100%;
-    }
-  </style>
 </head>
 <body>
-  <h1>🌳 株ツリー</h1>
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title">🌳 株ツリー</h1>
+      <p class="app-subtitle">銘柄コードを入力して株価チャートを表示</p>
+    </header>
 
-  <div class="controls">
-    <input
-      id="code"
-      type="text"
-      inputmode="numeric"
-      placeholder="銘柄コード（例: 7203）"
-    >
-    <button id="showButton" type="button">表示</button>
-  </div>
+    <section class="controls">
+      <input
+        id="code"
+        class="code-input"
+        type="text"
+        inputmode="numeric"
+        placeholder="銘柄コード（例: 7203）"
+      >
+      <button id="showButton" class="show-button" type="button">
+        表示
+      </button>
+    </section>
 
-  <div class="chart-wrap">
-    <canvas id="chart" width="400" height="300"></canvas>
-  </div>
+    <section class="chart-section">
+      <canvas id="chart" width="400" height="300"></canvas>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 
