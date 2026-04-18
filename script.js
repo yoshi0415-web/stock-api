@@ -1,7 +1,4 @@
-alert("script.js 読み込みOK");
-
 document.addEventListener("DOMContentLoaded", () => {
-
   let chart = null;
 
   const codeInput = document.getElementById("code");
@@ -31,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   risingButton.addEventListener("click", showRisingStocks);
 
-  codeInput.addEventListener("keydown", function (event) {
+  codeInput.addEventListener("keydown", event => {
     if (event.key === "Enter") {
       loadChart();
     }
@@ -98,9 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } catch (error) {
-  console.error(error);
-  alert("通信エラー: " + error.message);
-}
+      console.error(error);
+      alert("通信エラー: " + error.message);
     }
   }
 
