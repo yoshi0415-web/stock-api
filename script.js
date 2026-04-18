@@ -4,9 +4,21 @@ function loadChart() {
 
   const code = document.getElementById("code").value;
 
+  if (!code) {
+    alert("銘柄コードを入力して");
+    return;
+  }
+
   fetch(`https://stock-api-weld-three.vercel.app/api/stock?code=${code}`)
     .then(res => res.json())
     .then(data => {
+
+      console.log(data); // デバッグ用
+
+      if (!data.data || data.data.length === 0) {
+        alert("データがありません");
+        return;
+      }
 
       const prices = data.data;
 
@@ -20,10 +32,16 @@ function loadChart() {
         data: {
           labels: labels,
           datasets: [{
-            data: close
+            label: code + " の株価",
+            data: close,
+            borderWidth: 2
           }]
         }
       });
 
+    })
+    .catch(err => {
+      console.error(err);
+      alert("通信エラー");
     });
 }
