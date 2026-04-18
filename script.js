@@ -1,48 +1,61 @@
-alert("JS読み込まれてる");
-let chart;
+let chart = null;
 
-function loadChart() {
+const codeInput = document.getElementById("code");
+const showButton = document.getElementById("showButton");
+const chartCanvas = document.getElementById("chart");
 
-  const code = document.getElementById("code").value;
+showButton.addEventListener("click", loadChart);
+codeInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    loadChart();
+  }
+});
+
+async function loadChart() {
+  const code = codeInput.value.trim();
 
   if (!code) {
     alert("銘柄コードを入力して");
     return;
   }
 
-  fetch(`https://kabutree.vercel.app/api/stock?code=${code}`)
-    .then(res => res.json())
-    .then(data => {
+  try {
+    const response = await fetch(`/api/stock?code=${code}`);
+    const data = await response.json();
 
-      console.log(data); // デバッグ用
+    if (!data.data || data.data.length === 0) {
+      alert("データがありません");
+      return;
+    }
 
-      if (!data.data || data.data.length === 0) {
-        alert("データがありません");
-        return;
+    const prices = data.data;
+    const labels = prices.map(item => item.Date);
+    const closePrices = prices.map(item => item.C);
+
+    if (chart) {
+      chart.destroy();
+    }
+
+    chart = new Chart(chartCanvas, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: `${code} の株価`,
+            data: closePrices,
+            borderWidth: 2,
+            tension: 0.2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true
       }
-
-      const prices = data.data;
-
-      const labels = prices.map(d => d.Date);
-      const close = prices.map(d => d.C);
-
-      if (chart) chart.destroy();
-
-      chart = new Chart(document.getElementById('chart'), {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: code + " の株価",
-            data: close,
-            borderWidth: 2
-          }]
-        }
-      });
-
-    })
-    .catch(err => {
-      console.error(err);
-      alert("通信エラー");
     });
+  } catch (error) {
+    console.error(error);
+    alert("通信エラー");
+  }
 }
