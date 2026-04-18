@@ -1,3 +1,4 @@
+alert("script.js 読み込みOK");
 let chart = null;
 
 const codeInput = document.getElementById("code");
