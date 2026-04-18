@@ -52,16 +52,22 @@ async function loadChart() {
 
     let prices = data.data;
 
-const from = fromInput.value.trim();
-const to = toInput.value.trim();
+    const from = fromInput.value.trim();
+    const to = toInput.value.trim();
 
-if (from) {
-  prices = prices.filter(item => item.Date.replaceAll("-", "") >= from);
-}
+    if (from) {
+      prices = prices.filter(item => item.Date.replaceAll("-", "") >= from);
+    }
 
-if (to) {
-  prices = prices.filter(item => item.Date.replaceAll("-", "") <= to);
-}
+    if (to) {
+      prices = prices.filter(item => item.Date.replaceAll("-", "") <= to);
+    }
+
+    if (prices.length === 0) {
+      alert("その期間のデータがありません");
+      return;
+    }
+
     const labels = prices.map(item => item.Date);
     const closePrices = prices.map(item => item.C);
 
@@ -105,6 +111,6 @@ function showRisingStocks() {
       loadChart();
     });
 
-    resultList.appendChild(li);、
+    resultList.appendChild(li);
   }
 }
