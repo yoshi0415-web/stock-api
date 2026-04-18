@@ -1,47 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>株ツリー</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>株ツリー</title>
 
-<link rel="apple-touch-icon" href="icon1.0.PNG">
-<link rel="icon" href="icon1.0.PNG">
+  <link rel="apple-touch-icon" href="icon1.0.PNG">
+  <link rel="icon" href="icon1.0.PNG">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 24px 16px;
+      background: #ffffff;
+      color: #222222;
+    }
 
-<style>
-  body {
-    font-family: sans-serif;
-    text-align: center;
-  }
+    h1 {
+      margin: 0 0 24px;
+      font-size: 28px;
+    }
 
-  canvas {
-    max-width: 100%;
-  }
-</style>
+    .controls {
+      margin-bottom: 24px;
+    }
 
+    input {
+      width: 180px;
+      max-width: 80%;
+      padding: 10px 12px;
+      font-size: 16px;
+      margin-right: 8px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #222222;
+      color: #ffffff;
+    }
+
+    button:active {
+      opacity: 0.8;
+    }
+
+    .chart-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+  </style>
 </head>
 <body>
+  <h1>🌳 株ツリー</h1>
 
-<h1>テスト123</h1>
-<h2>🌳 株ツリー</h2>
+  <div class="controls">
+    <input
+      id="code"
+      type="text"
+      inputmode="numeric"
+      placeholder="銘柄コード（例: 7203）"
+    >
+    <button id="showButton" type="button">表示</button>
+  </div>
 
-<input id="code" placeholder="銘柄コード（例:7203）">
-<button onclick="alert('ボタン反応してる')">表示</button>
+  <div class="chart-wrap">
+    <canvas id="chart" width="400" height="300"></canvas>
+  </div>
 
-<br><br>
+  <script src="script.js"></script>
 
-<canvas id="chart" width="400" height="300"></canvas>
-
-<script>
-function loadChart() {
-  alert("loadChartは動いてる");
-}
-</script>
-
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(function (error) {
+        console.log("Service Worker registration failed:", error);
+      });
+    }
+  </script>
 </body>
 </html>
