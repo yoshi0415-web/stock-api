@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>株ツリー</title>
+  <title>株ツリー v1.0.0</title>
 
+  <!-- アイコン -->
   <link rel="apple-touch-icon" href="icon1.0.PNG">
   <link rel="icon" href="icon1.0.PNG">
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css?v=1.0.0">
 
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
   <main class="app">
     <header class="app-header">
       <h1 class="app-title">🌳 株ツリー</h1>
-      <p class="app-subtitle">銘柄コードを入力して株価チャートを表示</p>
+      <p class="app-subtitle">v1.0.0</p>
     </header>
 
     <section class="controls">
@@ -39,13 +45,11 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1.0.0"></script>
 
   <script>
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(function (error) {
-        console.log("Service Worker registration failed:", error);
-      });
+      navigator.serviceWorker.register("/sw.js");
     }
   </script>
 </body>
