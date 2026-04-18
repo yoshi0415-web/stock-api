@@ -1,3 +1,4 @@
+alert("JS読み込まれてる");
 let chart;
 
 function loadChart() {
