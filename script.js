@@ -9,7 +9,7 @@ function loadChart() {
     return;
   }
 
-  fetch(`https://stock-api-weld-three.vercel.app/api/stock?code=${code}`)
+  fetch(`https://kabutree.vercel.app/api/stock?code=${code}`)
     .then(res => res.json())
     .then(data => {
 
