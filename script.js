@@ -3,6 +3,11 @@ let chart = null;
 const codeInput = document.getElementById("code");
 const showButton = document.getElementById("showButton");
 const chartCanvas = document.getElementById("chart");
+const reloadButton = document.getElementById("reloadButton");
+
+reloadButton.addEventListener("click", () => {
+  location.reload();
+});
 
 showButton.addEventListener("click", loadChart);
 codeInput.addEventListener("keydown", function (event) {
