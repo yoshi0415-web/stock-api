@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`/api/stock?code=${code}`);
+      const response = await fetch(`https://kabutree.vercel.app/api/stock?code=${code}`);
       const data = await response.json();
 
       if (!data.data || data.data.length === 0) {
