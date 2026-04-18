@@ -9,6 +9,14 @@ const chartCanvas = document.getElementById("chart");
 
 const WATCH_CODES = ["7203", "6758", "7974", "9984", "9432"];
 
+const STOCK_NAMES = {
+  "7203": "トヨタ",
+  "6758": "ソニーグループ",
+  "7974": "任天堂",
+  "9984": "ソフトバンクグループ",
+  "9432": "NTT"
+};
+
 showButton.addEventListener("click", loadChart);
 
 reloadButton.addEventListener("click", () => {
