@@ -62,7 +62,7 @@ async function loadChart() {
         labels: labels,
         datasets: [
           {
-            label: `${code} の株価`,
+            label: `${code} ${STOCK_NAMES[code] || ""} の株価`,
             data: closePrices,
             borderWidth: 2,
             tension: 0.2
