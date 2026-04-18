@@ -2,14 +2,21 @@ let chart = null;
 
 const codeInput = document.getElementById("code");
 const showButton = document.getElementById("showButton");
-const chartCanvas = document.getElementById("chart");
 const reloadButton = document.getElementById("reloadButton");
+const risingButton = document.getElementById("risingButton");
+const resultList = document.getElementById("resultList");
+const chartCanvas = document.getElementById("chart");
+
+const WATCH_CODES = ["7203", "6758", "7974", "9984", "9432"];
+
+showButton.addEventListener("click", loadChart);
 
 reloadButton.addEventListener("click", () => {
   location.reload();
 });
 
-showButton.addEventListener("click", loadChart);
+risingButton.addEventListener("click", showRisingStocks);
+
 codeInput.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
     loadChart();
@@ -62,5 +69,15 @@ async function loadChart() {
   } catch (error) {
     console.error(error);
     alert("通信エラー");
+  }
+}
+
+function showRisingStocks() {
+  resultList.innerHTML = "";
+
+  for (const code of WATCH_CODES) {
+    const li = document.createElement("li");
+    li.textContent = code;
+    resultList.appendChild(li);
   }
 }
