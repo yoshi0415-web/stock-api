@@ -20,6 +20,10 @@ const STOCK_NAMES = {
   "9432": "NTT"
 };
 
+alert("showButton: " + !!showButton);
+alert("reloadButton: " + !!reloadButton);
+alert("risingButton: " + !!risingButton);
+
 showButton.addEventListener("click", loadChart);
 
 reloadButton.addEventListener("click", () => {
@@ -27,6 +31,8 @@ reloadButton.addEventListener("click", () => {
 });
 
 risingButton.addEventListener("click", showRisingStocks);
+
+alert("ボタン設定までOK");
 
 alert("ボタン設定までOK");
 
