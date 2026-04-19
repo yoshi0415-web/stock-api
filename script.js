@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
+  let isLoading = false;
 
   const risingButton = document.getElementById("risingButton");
   const fallingButton = document.getElementById("fallingButton");
   const bullishButton = document.getElementById("bullishButton");
   const volumeButton = document.getElementById("volumeButton");
+
   const resultList = document.getElementById("resultList");
   const chartCanvas = document.getElementById("chart");
   const chartTitle = document.getElementById("chartTitle");
@@ -20,29 +22,52 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   risingButton.addEventListener("click", () => {
+    if (isLoading) return;
     showStockList(WATCH_CODES, "上昇中");
   });
 
   fallingButton.addEventListener("click", () => {
+    if (isLoading) return;
     showStockList(WATCH_CODES, "下落中");
   });
 
   bullishButton.addEventListener("click", () => {
+    if (isLoading) return;
     showStockList(WATCH_CODES, "陽線連続");
   });
 
   volumeButton.addEventListener("click", () => {
+    if (isLoading) return;
     showStockList(WATCH_CODES, "出来高増");
   });
+
+  function setLoadingState(loading) {
+    isLoading = loading;
+
+    const text = loading ? "読込中..." : null;
+
+    [risingButton, fallingButton, bullishButton, volumeButton].forEach(btn => {
+      btn.disabled = loading;
+
+      if (loading) {
+        btn.dataset.oldText = btn.textContent;
+        btn.textContent = text;
+      } else {
+        btn.textContent = btn.dataset.oldText;
+      }
+    });
+  }
 
   function showStockList(codes, label) {
     resultList.innerHTML = "";
 
     for (const code of codes) {
       const li = document.createElement("li");
+
       li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
 
       li.addEventListener("click", () => {
+        if (isLoading) return;
         loadChart(code, label);
       });
 
@@ -51,8 +76,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadChart(code, label) {
+    if (isLoading) return;
+
+    setLoadingState(true);
+
     try {
-      const response = await fetch(`https://kabutree.vercel.app/api/stock?code=${code}`);
+      const response = await fetch(
+        `https://kabutree.vercel.app/api/stock?code=${code}`
+      );
+
       const data = await response.json();
 
       if (!data.data || data.data.length === 0) {
@@ -61,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const prices = data.data;
+
       const labels = prices.map(item => item.Date);
       const closePrices = prices.map(item => item.C);
 
@@ -68,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
         chart.destroy();
       }
 
-      chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+      chartTitle.textContent =
+        `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
 
       chart = new Chart(chartCanvas, {
         type: "line",
@@ -76,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
           labels: labels,
           datasets: [
             {
-              label: `${code} ${STOCK_NAMES[code] || ""} の株価`,
+              label: `${code} ${STOCK_NAMES[code] || ""}`,
               data: closePrices,
               borderWidth: 2,
               tension: 0.2
@@ -88,9 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
           maintainAspectRatio: true
         }
       });
+
     } catch (error) {
       console.error(error);
       alert("通信エラー");
+    } finally {
+      setLoadingState(false);
     }
   }
 });
