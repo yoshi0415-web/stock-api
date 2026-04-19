@@ -1,15 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
-  let isLoading = false;
 
-  const codeInput = document.getElementById("code");
-  const fromInput = document.getElementById("from");
-  const toInput = document.getElementById("to");
-  const showButton = document.getElementById("showButton");
-  const reloadButton = document.getElementById("reloadButton");
   const risingButton = document.getElementById("risingButton");
+  const fallingButton = document.getElementById("fallingButton");
+  const bullishButton = document.getElementById("bullishButton");
+  const volumeButton = document.getElementById("volumeButton");
   const resultList = document.getElementById("resultList");
   const chartCanvas = document.getElementById("chart");
+  const chartTitle = document.getElementById("chartTitle");
 
   const WATCH_CODES = ["7203", "6758", "7974", "9984", "9432"];
 
@@ -21,40 +19,38 @@ document.addEventListener("DOMContentLoaded", () => {
     "9432": "NTT"
   };
 
-  showButton.addEventListener("click", loadChart);
-
-  reloadButton.addEventListener("click", () => {
-    location.reload();
+  risingButton.addEventListener("click", () => {
+    showStockList(WATCH_CODES, "上昇中");
   });
 
-  risingButton.addEventListener("click", showRisingStocks);
+  fallingButton.addEventListener("click", () => {
+    showStockList(WATCH_CODES, "下落中");
+  });
 
-  codeInput.addEventListener("keydown", event => {
-    if (event.key === "Enter") {
-      loadChart();
+  bullishButton.addEventListener("click", () => {
+    showStockList(WATCH_CODES, "陽線連続");
+  });
+
+  volumeButton.addEventListener("click", () => {
+    showStockList(WATCH_CODES, "出来高増");
+  });
+
+  function showStockList(codes, label) {
+    resultList.innerHTML = "";
+
+    for (const code of codes) {
+      const li = document.createElement("li");
+      li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
+
+      li.addEventListener("click", () => {
+        loadChart(code, label);
+      });
+
+      resultList.appendChild(li);
     }
-  });
-
-  function setLoadingState(loading) {
-    isLoading = loading;
-    showButton.disabled = loading;
-    showButton.textContent = loading ? "読込中..." : "表示";
   }
 
-  async function loadChart() {
-    if (isLoading) {
-      return;
-    }
-
-    const code = codeInput.value.trim();
-
-    if (!code) {
-      alert("銘柄コードを入力して");
-      return;
-    }
-
-    setLoadingState(true);
-
+  async function loadChart(code, label) {
     try {
       const response = await fetch(`https://kabutree.vercel.app/api/stock?code=${code}`);
       const data = await response.json();
@@ -64,30 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      let prices = data.data;
-
-      const from = fromInput.value.trim();
-      const to = toInput.value.trim();
-
-      if (from) {
-        prices = prices.filter(item => item.Date.replaceAll("-", "") >= from);
-      }
-
-      if (to) {
-        prices = prices.filter(item => item.Date.replaceAll("-", "") <= to);
-      }
-
-      if (prices.length === 0) {
-        alert("その期間のデータがありません");
-        return;
-      }
-
+      const prices = data.data;
       const labels = prices.map(item => item.Date);
       const closePrices = prices.map(item => item.C);
 
       if (chart) {
         chart.destroy();
       }
+
+      chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
 
       chart = new Chart(chartCanvas, {
         type: "line",
@@ -109,25 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } catch (error) {
       console.error(error);
-      alert("通信エラー: " + error.message);
-    } finally {
-      setLoadingState(false);
-    }
-  }
-
-  function showRisingStocks() {
-    resultList.innerHTML = "";
-
-    for (const code of WATCH_CODES) {
-      const li = document.createElement("li");
-      li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
-
-      li.addEventListener("click", () => {
-        codeInput.value = code;
-        loadChart();
-      });
-
-      resultList.appendChild(li);
+      alert("通信エラー");
     }
   }
 });
