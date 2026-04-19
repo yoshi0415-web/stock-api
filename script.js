@@ -54,6 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   function showStockList(codes, label) {
     resultList.innerHTML = "";
 
@@ -70,33 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function loadChart(code, label) {
-    if (isLoading) return;
-
-    const requestId = ++currentRequestId;
-    setLoadingState(true);
-
-    try {
-      const response = await fetch(
-        `https://kabutree.vercel.app/api/stock?code=${code}`
-      );
-
-      const data = await response.json();
-
-      if (requestId !== currentRequestId) {
-        return;
-      }
-
-      if (!data.data || data.data.length === 0) {
-        alert("データがありません");
-        setLoadingState(false);
-        return;
-      }
-
-      const prices = data.data;
-      const labels = prices.map(item => item.Date);
-      const closePrices = prices.map(item => item.C);
-
+  async function drawChart(requestId, code, label, labels, closePrices) {
+    return new Promise(resolve => {
       if (chart) {
         chart.destroy();
       }
@@ -120,14 +99,47 @@ document.addEventListener("DOMContentLoaded", () => {
           responsive: true,
           maintainAspectRatio: true,
           animation: {
+            duration: 600,
             onComplete: () => {
-              if (requestId === currentRequestId) {
-                setLoadingState(false);
-              }
+              resolve();
             }
           }
         }
       });
+    });
+  }
+
+  async function loadChart(code, label) {
+    if (isLoading) return;
+
+    const requestId = ++currentRequestId;
+    const startedAt = Date.now();
+    const MIN_LOCK_MS = 1200;
+
+    setLoadingState(true);
+
+    try {
+      const response = await fetch(
+        `https://kabutree.vercel.app/api/stock?code=${code}`
+      );
+
+      const data = await response.json();
+
+      if (requestId !== currentRequestId) {
+        return;
+      }
+
+      if (!data.data || data.data.length === 0) {
+        alert("データがありません");
+        return;
+      }
+
+      const prices = data.data;
+      const labels = prices.map(item => item.Date);
+      const closePrices = prices.map(item => item.C);
+
+      await drawChart(requestId, code, label, labels, closePrices);
+
     } catch (error) {
       if (requestId !== currentRequestId) {
         return;
@@ -135,7 +147,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.error(error);
       alert("通信エラー");
-      setLoadingState(false);
+    } finally {
+      if (requestId === currentRequestId) {
+        const elapsed = Date.now() - startedAt;
+        const remaining = Math.max(0, MIN_LOCK_MS - elapsed);
+
+        await wait(remaining);
+        setLoadingState(false);
+      }
     }
   }
 });
