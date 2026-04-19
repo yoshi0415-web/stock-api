@@ -43,16 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function setLoadingState(loading) {
-  isLoading = loading;
+    isLoading = loading;
 
-  if (loading) {
-    document.body.classList.add("is-loading");
-    resultList.classList.add("is-loading");
-  } else {
-    document.body.classList.remove("is-loading");
-    resultList.classList.remove("is-loading");
-  }
-}
+    if (loading) {
+      document.body.classList.add("is-loading");
+      resultList.classList.add("is-loading");
+    } else {
+      document.body.classList.remove("is-loading");
+      resultList.classList.remove("is-loading");
+    }
   }
 
   function showStockList(codes, label) {
@@ -84,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
 
-      // 古い通信結果は無視
       if (requestId !== currentRequestId) {
         return;
       }
