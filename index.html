@@ -5,66 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>株ツリー</title>
 
-  <!-- アイコン -->
   <link rel="apple-touch-icon" href="icon1.0.PNG">
   <link rel="icon" href="icon1.0.PNG">
-
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css?2026.04.19-1">
-
-  <!-- Chart.js -->
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
   <main class="app">
-
     <header class="app-header">
       <h1 class="app-title">🌳 株ツリー</h1>
     </header>
 
-    <section class="controls">
-      <input
-        id="code"
-        class="code-input"
-        type="text"
-        inputmode="numeric"
-        placeholder="銘柄コード（例: 7203）"
-      >
-
-      <input
-        id="from"
-        class="code-input"
-        type="text"
-        inputmode="numeric"
-        placeholder="開始日（例: 20240125）"
-      >
-
-      <input
-        id="to"
-        class="code-input"
-        type="text"
-        inputmode="numeric"
-        placeholder="終了日（例: 20240130）"
-      >
-
-      <button id="showButton" class="show-button" type="button">
-        表示
-      </button>
-
-      <button id="reloadButton" class="show-button" type="button">
-        更新
-      </button>
-    </section>
-
     <section class="filters">
-      <button id="risingButton" class="show-button" type="button">
-        上昇中
-      </button>
+      <button id="risingButton" class="show-button" type="button">上昇中</button>
+      <button id="fallingButton" class="show-button" type="button">下落中</button>
+      <button id="bullishButton" class="show-button" type="button">陽線連続</button>
+      <button id="volumeButton" class="show-button" type="button">出来高増</button>
     </section>
 
     <section class="result-section">
@@ -73,26 +33,24 @@
     </section>
 
     <section class="chart-section">
+      <h2 id="chartTitle">チャート</h2>
       <canvas id="chart" width="400" height="300"></canvas>
     </section>
-
   </main>
 
-  <!-- JS -->
-  <script src="script.js?2026.04.19-2"></script>
+  <div class="version-text">
+    Ver 2026.04.19-3
+  </div>
 
-  <!-- Service Worker -->
+  <script src="script.js"></script>
+
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
     }
   </script>
-
-  <!-- 左下バージョン表示 -->
   <div class="version-text">
-  <!-- 更新メモ: 連打対策 -->
-  Ver 2026.04.19-2
-  </div>
-
+  Ver 2026.04.19-3
+</div>
 </body>
 </html>
