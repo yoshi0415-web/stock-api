@@ -74,18 +74,14 @@ body {
   position: fixed;
   inset: 0;
   display: none;
-  z-index: 9999;
+  z-index: 99999;
   background: rgba(255, 255, 255, 0.35);
+  touch-action: none;
 }
 
 body.is-loading .loading-blocker {
   display: block;
   pointer-events: auto;
-}
-
-body.is-loading button,
-body.is-loading li {
-  pointer-events: none;
 }
 
 #resultList.is-loading {
