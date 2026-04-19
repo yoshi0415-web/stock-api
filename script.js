@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const requestId = ++currentRequestId;
     const startedAt = Date.now();
-    const MIN_LOCK_MS = 1200;
+    const MIN_LOCK_MS = 5000;
 
     setLoadingState(true);
 
