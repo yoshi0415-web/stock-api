@@ -62,7 +62,7 @@ body {
   z-index: 999;
 }
 
-.result-section ul.is-loading {
+#resultList.is-loading {
   pointer-events: none;
   opacity: 0.6;
 }
