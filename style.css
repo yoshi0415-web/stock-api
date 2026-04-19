@@ -74,13 +74,18 @@ body {
   position: fixed;
   inset: 0;
   display: none;
-  z-index: 2000;
+  z-index: 9999;
   background: rgba(255, 255, 255, 0.35);
+}
+
+body.is-loading .loading-blocker {
+  display: block;
   pointer-events: auto;
 }
 
-.loading-blocker.show {
-  display: block;
+body.is-loading button,
+body.is-loading li {
+  pointer-events: none;
 }
 
 #resultList.is-loading {
