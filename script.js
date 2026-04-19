@@ -65,9 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
       li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
 
       li.addEventListener("click", () => {
-        if (isLoading) return;
-        loadChart(code, label);
-      });
+  if (isLoading) return;
+  loadChart(code, label);
+});
 
       resultList.appendChild(li);
     }
