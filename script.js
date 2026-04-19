@@ -20,27 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "7974": "任天堂",
     "9984": "ソフトバンクグループ",
     "9432": "NTT"
-    
-    function blockInteraction(event) {
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-}
-
-function enableInteractionBlock() {
-  document.addEventListener("click", blockInteraction, true);
-  document.addEventListener("touchstart", blockInteraction, { capture: true, passive: false });
-  document.addEventListener("touchend", blockInteraction, { capture: true, passive: false });
-  document.addEventListener("pointerdown", blockInteraction, true);
-}
-
-function disableInteractionBlock() {
-  document.removeEventListener("click", blockInteraction, true);
-  document.removeEventListener("touchstart", blockInteraction, true);
-  document.removeEventListener("touchend", blockInteraction, true);
-  document.removeEventListener("pointerdown", blockInteraction, true);
-}
-    
   };
 
   risingButton.addEventListener("click", () => {
@@ -69,11 +48,9 @@ function disableInteractionBlock() {
   if (loading) {
     document.body.classList.add("is-loading");
     resultList.classList.add("is-loading");
-    enableInteractionBlock();
   } else {
     document.body.classList.remove("is-loading");
     resultList.classList.remove("is-loading");
-    disableInteractionBlock();
   }
 }
   }
