@@ -165,8 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-        alert("データがありません");
-        return;
+  console.log("返ってきた data:", data);
+  alert(`データがありません\n${JSON.stringify(data)}`);
+  return;
       }
 
       const prices = data.data;
