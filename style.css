@@ -62,6 +62,15 @@ body {
   z-index: 999;
 }
 
+.result-section ul.is-loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.show-button:disabled {
+  opacity: 0.6;
+}
+
 canvas {
   max-width: 100%;
 }
