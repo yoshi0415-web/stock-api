@@ -1,4 +1,4 @@
-const CACHE_NAME = "kabutree-cache-v1.0.10";
+const CACHE_NAME = "kabutree-cache-2026.04.19-8";
 
 const STATIC_FILES = [
   "/",
