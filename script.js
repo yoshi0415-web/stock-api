@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultList = document.getElementById("resultList");
   const chartCanvas = document.getElementById("chart");
   const chartTitle = document.getElementById("chartTitle");
+  const loadingBlocker = document.getElementById("loadingBlocker");
 
   const WATCH_CODES = ["7203", "6758", "7974", "9984", "9432"];
 
@@ -44,10 +45,16 @@ document.addEventListener("DOMContentLoaded", () => {
   function setLoadingState(loading) {
     isLoading = loading;
 
+    [risingButton, fallingButton, bullishButton, volumeButton].forEach(btn => {
+      btn.disabled = loading;
+    });
+
     if (loading) {
       resultList.classList.add("is-loading");
+      loadingBlocker.classList.add("show");
     } else {
       resultList.classList.remove("is-loading");
+      loadingBlocker.classList.remove("show");
     }
   }
 
@@ -112,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
           maintainAspectRatio: true
         }
       });
-
     } catch (error) {
       console.error(error);
       alert("通信エラー");
