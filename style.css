@@ -50,6 +50,18 @@ body {
   padding: 16px;
 }
 
+.version-text {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  font-size: 11px;
+  color: #999;
+  background: rgba(255,255,255,0.8);
+  padding: 4px 6px;
+  border-radius: 6px;
+  z-index: 999;
+}
+
 canvas {
   max-width: 100%;
 }
