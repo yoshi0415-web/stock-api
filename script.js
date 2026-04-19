@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!data.data || data.data.length === 0) {
         alert("データがありません");
+        setLoadingState(false);
         return;
       }
 
@@ -117,7 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true
+          maintainAspectRatio: true,
+          animation: {
+            onComplete: () => {
+              if (requestId === currentRequestId) {
+                setLoadingState(false);
+              }
+            }
+          }
         }
       });
     } catch (error) {
@@ -127,12 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.error(error);
       alert("通信エラー");
-    } finally {
-      if (requestId === currentRequestId) {
-        setTimeout(() => {
-          setLoadingState(false);
-        }, 1000);
-      }
+      setLoadingState(false);
     }
   }
 });
