@@ -5,21 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>株ツリー</title>
 
+  <!-- アイコン -->
   <link rel="apple-touch-icon" href="icon1.0.PNG">
   <link rel="icon" href="icon1.0.PNG">
 
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css?2026.04.19-1">
 
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
   <main class="app">
+
     <header class="app-header">
-      <h1 class="app-title">🌳 株ツリーv1.0.13</h1>
+      <h1 class="app-title">🌳 株ツリー</h1>
     </header>
 
     <section class="controls">
@@ -57,7 +62,9 @@
     </section>
 
     <section class="filters">
-      <button id="risingButton" class="show-button" type="button">上昇中</button>
+      <button id="risingButton" class="show-button" type="button">
+        上昇中
+      </button>
     </section>
 
     <section class="result-section">
@@ -68,20 +75,24 @@
     <section class="chart-section">
       <canvas id="chart" width="400" height="300"></canvas>
     </section>
+
   </main>
 
-  <script>
-  alert("index.html は v1.0.10");
-</script>
+  <!-- JS -->
+  <script src="script.js?2026.04.19-1"></script>
 
-<script>
-  alert("script.js 読み込みOK");
-</script>
-
+  <!-- Service Worker -->
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
     }
   </script>
+
+  <!-- 左下バージョン表示 -->
+  <div class="version-text">
+    <!-- 更新メモ: 安定版 -->
+    Ver 2026.04.19-1
+  </div>
+
 </body>
 </html>
