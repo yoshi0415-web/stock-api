@@ -42,18 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function setLoadingState(loading) {
-  isLoading = loading;
+    isLoading = loading;
 
-  [risingButton, fallingButton, bullishButton, volumeButton].forEach(btn => {
-    btn.disabled = loading;
-  });
-
-  if (loading) {
-    resultList.classList.add("is-loading");
-  } else {
-    resultList.classList.remove("is-loading");
-  }
-}
+    if (loading) {
+      resultList.classList.add("is-loading");
+    } else {
+      resultList.classList.remove("is-loading");
+    }
   }
 
   function showStockList(codes, label) {
@@ -61,13 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (const code of codes) {
       const li = document.createElement("li");
-
       li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
 
       li.addEventListener("click", () => {
-  if (isLoading) return;
-  loadChart(code, label);
-});
+        if (isLoading) return;
+        loadChart(code, label);
+      });
 
       resultList.appendChild(li);
     }
@@ -91,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const prices = data.data;
-
       const labels = prices.map(item => item.Date);
       const closePrices = prices.map(item => item.C);
 
@@ -99,8 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chart.destroy();
       }
 
-      chartTitle.textContent =
-        `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+      chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
 
       chart = new Chart(chartCanvas, {
         type: "line",
