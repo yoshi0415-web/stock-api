@@ -42,20 +42,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function setLoadingState(loading) {
-    isLoading = loading;
+  isLoading = loading;
 
-    const text = loading ? "読込中..." : null;
+  [risingButton, fallingButton, bullishButton, volumeButton].forEach(btn => {
+    btn.disabled = loading;
+  });
 
-    [risingButton, fallingButton, bullishButton, volumeButton].forEach(btn => {
-      btn.disabled = loading;
-
-      if (loading) {
-        btn.dataset.oldText = btn.textContent;
-        btn.textContent = text;
-      } else {
-        btn.textContent = btn.dataset.oldText;
-      }
-    });
+  if (loading) {
+    resultList.classList.add("is-loading");
+  } else {
+    resultList.classList.remove("is-loading");
+  }
+}
   }
 
   function showStockList(codes, label) {
