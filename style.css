@@ -70,6 +70,20 @@ body {
 .show-button:disabled {
   opacity: 0.6;
 }
+.loading-blocker {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 2000;
+}
+
+.loading-blocker.show {
+  display: block;
+}
+
+#resultList.is-loading {
+  opacity: 0.6;
+}
 
 canvas {
   max-width: 100%;
