@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
   let isLoading = false;
   let currentRequestId = 0;
+  let abortController = null;
+  let lastFinishedAt = 0;
 
   const risingButton = document.getElementById("risingButton");
   const fallingButton = document.getElementById("fallingButton");
@@ -21,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "9984": "ソフトバンクグループ",
     "9432": "NTT"
   };
+
+  const MIN_COOLDOWN_MS = 1500;
 
   risingButton.addEventListener("click", () => {
     if (isLoading) return;
@@ -51,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       document.body.classList.remove("is-loading");
       resultList.classList.remove("is-loading");
+      lastFinishedAt = Date.now();
     }
   }
 
@@ -74,54 +79,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function drawChart(requestId, code, label, labels, closePrices) {
-    return new Promise(resolve => {
-      if (chart) {
-        chart.destroy();
-      }
+  function destroyChart() {
+    if (chart) {
+      chart.destroy();
+      chart = null;
+    }
+  }
 
-      chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+  function drawChart(code, label, labels, closePrices) {
+    destroyChart();
 
-      chart = new Chart(chartCanvas, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: `${code} ${STOCK_NAMES[code] || ""}`,
-              data: closePrices,
-              borderWidth: 2,
-              tension: 0.2
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          animation: {
-            duration: 600,
-            onComplete: () => {
-              resolve();
-            }
+    chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+
+    chart = new Chart(chartCanvas, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: `${code} ${STOCK_NAMES[code] || ""}`,
+            data: closePrices,
+            borderWidth: 2,
+            tension: 0.2
           }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        animation: {
+          duration: 400
         }
-      });
+      }
     });
   }
 
   async function loadChart(code, label) {
     if (isLoading) return;
 
+    const sinceLastFinish = Date.now() - lastFinishedAt;
+    if (sinceLastFinish < MIN_COOLDOWN_MS) {
+      return;
+    }
+
     const requestId = ++currentRequestId;
-    const startedAt = Date.now();
-    const MIN_LOCK_MS = 5000;
+
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
 
     setLoadingState(true);
 
     try {
       const response = await fetch(
-        `https://kabutree.vercel.app/api/stock?code=${code}`
+        `https://kabutree.vercel.app/api/stock?code=${code}`,
+        { signal: abortController.signal }
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
 
       const data = await response.json();
 
@@ -129,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      if (!data.data || data.data.length === 0) {
+      if (!data || !Array.isArray(data.data) || data.data.length === 0) {
         alert("データがありません");
         return;
       }
@@ -138,21 +156,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const labels = prices.map(item => item.Date);
       const closePrices = prices.map(item => item.C);
 
-      await drawChart(requestId, code, label, labels, closePrices);
+      drawChart(code, label, labels, closePrices);
 
     } catch (error) {
+      if (error.name === "AbortError") {
+        return;
+      }
+
       if (requestId !== currentRequestId) {
         return;
       }
 
       console.error(error);
-      alert("通信エラー");
+      alert(`通信エラー: ${error.message}`);
     } finally {
       if (requestId === currentRequestId) {
-        const elapsed = Date.now() - startedAt;
-        const remaining = Math.max(0, MIN_LOCK_MS - elapsed);
-
-        await wait(remaining);
+        abortController = null;
         setLoadingState(false);
       }
     }
