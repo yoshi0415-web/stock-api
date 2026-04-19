@@ -35,6 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  function setLoadingState(loading) {
+    isLoading = loading;
+    showButton.disabled = loading;
+    showButton.textContent = loading ? "読込中..." : "表示";
+  }
+
   async function loadChart() {
     if (isLoading) {
       return;
@@ -47,20 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    isLoading = true;
-    showButton.disabled = true;
-    showButton.textContent = "読込中...";
+    setLoadingState(true);
 
     try {
-      const response = await fetch(
-        `https://kabutree.vercel.app/api/stock?code=${code}`
-      );
-
+      const response = await fetch(`https://kabutree.vercel.app/api/stock?code=${code}`);
       const data = await response.json();
 
       if (!data.data || data.data.length === 0) {
         alert("データがありません");
-        resetLoading();
         return;
       }
 
@@ -70,20 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const to = toInput.value.trim();
 
       if (from) {
-        prices = prices.filter(item =>
-          item.Date.replaceAll("-", "") >= from
-        );
+        prices = prices.filter(item => item.Date.replaceAll("-", "") >= from);
       }
 
       if (to) {
-        prices = prices.filter(item =>
-          item.Date.replaceAll("-", "") <= to
-        );
+        prices = prices.filter(item => item.Date.replaceAll("-", "") <= to);
       }
 
       if (prices.length === 0) {
         alert("その期間のデータがありません");
-        resetLoading();
         return;
       }
 
@@ -112,20 +107,12 @@ document.addEventListener("DOMContentLoaded", () => {
           maintainAspectRatio: true
         }
       });
-
-      resetLoading();
-
     } catch (error) {
       console.error(error);
       alert("通信エラー: " + error.message);
-      resetLoading();
+    } finally {
+      setLoadingState(false);
     }
-  }
-
-  function resetLoading() {
-    isLoading = false;
-    showButton.disabled = false;
-    showButton.textContent = "表示";
   }
 
   function showRisingStocks() {
@@ -133,9 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (const code of WATCH_CODES) {
       const li = document.createElement("li");
-
-      li.textContent =
-        `${code} ${STOCK_NAMES[code] || ""}`;
+      li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
 
       li.addEventListener("click", () => {
         codeInput.value = code;
