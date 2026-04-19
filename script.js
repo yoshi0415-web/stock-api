@@ -123,7 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
       alert("通信エラー");
     } finally {
-      setLoadingState(false);
-    }
+  setTimeout(() => {
+    setLoadingState(false);
+  }, 800);
+}
   }
 });
