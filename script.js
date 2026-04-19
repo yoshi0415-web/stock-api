@@ -114,6 +114,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  async function fetchStockData(code, signal) {
+    const response = await fetch(
+      `https://kabutree.vercel.app/api/stock?code=${code}`,
+      { signal }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    return await response.json();
+  }
+
+  async function fetchStockDataWithRetry(code, signal) {
+    let data = await fetchStockData(code, signal);
+
+    if (data && Array.isArray(data.data) && data.data.length > 0) {
+      return data;
+    }
+
+    await wait(600);
+
+    data = await fetchStockData(code, signal);
+    return data;
+  }
+
   async function loadChart(code, label) {
     if (isLoading) return;
 
@@ -132,16 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setLoadingState(true);
 
     try {
-      const response = await fetch(
-        `https://kabutree.vercel.app/api/stock?code=${code}`,
-        { signal: abortController.signal }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await fetchStockDataWithRetry(code, abortController.signal);
 
       if (requestId !== currentRequestId) {
         return;
