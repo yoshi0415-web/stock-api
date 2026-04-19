@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
   let isLoading = false;
+  let currentRequestId = 0;
 
   const risingButton = document.getElementById("risingButton");
   const fallingButton = document.getElementById("fallingButton");
@@ -10,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultList = document.getElementById("resultList");
   const chartCanvas = document.getElementById("chart");
   const chartTitle = document.getElementById("chartTitle");
-  const loadingBlocker = document.getElementById("loadingBlocker");
 
   const WATCH_CODES = ["7203", "6758", "7974", "9984", "9432"];
 
@@ -21,20 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "9984": "ソフトバンクグループ",
     "9432": "NTT"
   };
-
-  document.addEventListener("click", event => {
-    if (!isLoading) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-  }, true);
-
-  document.addEventListener("touchstart", event => {
-    if (!isLoading) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-  }, true);
 
   risingButton.addEventListener("click", () => {
     if (isLoading) return;
@@ -59,16 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function setLoadingState(loading) {
     isLoading = loading;
 
-    [risingButton, fallingButton, bullishButton, volumeButton].forEach(btn => {
-      btn.disabled = loading;
-    });
-
     if (loading) {
+      document.body.classList.add("is-loading");
       resultList.classList.add("is-loading");
-      loadingBlocker.classList.add("show");
     } else {
+      document.body.classList.remove("is-loading");
       resultList.classList.remove("is-loading");
-      loadingBlocker.classList.remove("show");
     }
   }
 
@@ -91,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadChart(code, label) {
     if (isLoading) return;
 
+    const requestId = ++currentRequestId;
     setLoadingState(true);
 
     try {
@@ -99,6 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       const data = await response.json();
+
+      // 古い通信結果は無視
+      if (requestId !== currentRequestId) {
+        return;
+      }
 
       if (!data.data || data.data.length === 0) {
         alert("データがありません");
@@ -134,12 +122,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } catch (error) {
+      if (requestId !== currentRequestId) {
+        return;
+      }
+
       console.error(error);
       alert("通信エラー");
     } finally {
-      setTimeout(() => {
-        setLoadingState(false);
-      }, 800);
+      if (requestId === currentRequestId) {
+        setTimeout(() => {
+          setLoadingState(false);
+        }, 1000);
+      }
     }
   }
 });
