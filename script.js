@@ -22,6 +22,20 @@ document.addEventListener("DOMContentLoaded", () => {
     "9432": "NTT"
   };
 
+  document.addEventListener("click", event => {
+    if (!isLoading) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
+
+  document.addEventListener("touchstart", event => {
+    if (!isLoading) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
+
   risingButton.addEventListener("click", () => {
     if (isLoading) return;
     showStockList(WATCH_CODES, "上昇中");
@@ -123,9 +137,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
       alert("通信エラー");
     } finally {
-  setTimeout(() => {
-    setLoadingState(false);
-  }, 800);
-}
+      setTimeout(() => {
+        setLoadingState(false);
+      }, 800);
+    }
   }
 });
