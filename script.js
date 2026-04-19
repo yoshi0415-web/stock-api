@@ -2,8 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
   let isLoading = false;
   let currentRequestId = 0;
-  let abortController = null;
-  let lastFinishedAt = 0;
+
+  let lastRequestAt = 0;
+  const MIN_COOLDOWN_MS = 3000;
 
   const risingButton = document.getElementById("risingButton");
   const fallingButton = document.getElementById("fallingButton");
@@ -23,8 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "9984": "ソフトバンクグループ",
     "9432": "NTT"
   };
-
-  const MIN_COOLDOWN_MS = 1500;
 
   risingButton.addEventListener("click", () => {
     if (isLoading) return;
@@ -55,12 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       document.body.classList.remove("is-loading");
       resultList.classList.remove("is-loading");
-      lastFinishedAt = Date.now();
     }
-  }
-
-  function wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   function showStockList(codes, label) {
@@ -79,17 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function destroyChart() {
+  function drawChart(code, label, labels, closePrices) {
     if (chart) {
       chart.destroy();
-      chart = null;
     }
-  }
 
-  function drawChart(code, label, labels, closePrices) {
-    destroyChart();
-
-    chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+    chartTitle.textContent =
+      `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
 
     chart = new Chart(chartCanvas, {
       type: "line",
@@ -114,82 +104,53 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  async function fetchStockData(code, signal) {
-    const response = await fetch(
-      `https://kabutree.vercel.app/api/stock?code=${code}`,
-      { signal }
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    return await response.json();
-  }
-
-  async function fetchStockDataWithRetry(code, signal) {
-    let data = await fetchStockData(code, signal);
-
-    if (data && Array.isArray(data.data) && data.data.length > 0) {
-      return data;
-    }
-
-    await wait(600);
-
-    data = await fetchStockData(code, signal);
-    return data;
-  }
-
   async function loadChart(code, label) {
+    const now = Date.now();
+
     if (isLoading) return;
 
-    const sinceLastFinish = Date.now() - lastFinishedAt;
-    if (sinceLastFinish < MIN_COOLDOWN_MS) {
+    // 3秒以内の再クリック無効
+    if (now - lastRequestAt < MIN_COOLDOWN_MS) {
       return;
     }
 
+    lastRequestAt = now;
+
     const requestId = ++currentRequestId;
-
-    if (abortController) {
-      abortController.abort();
-    }
-    abortController = new AbortController();
-
     setLoadingState(true);
 
     try {
-      const data = await fetchStockDataWithRetry(code, abortController.signal);
+      const response = await fetch(
+        `https://kabutree.vercel.app/api/stock?code=${code}`
+      );
+
+      const data = await response.json();
 
       if (requestId !== currentRequestId) {
         return;
       }
 
       if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-  console.log("返ってきた data:", data);
-  alert(`データがありません\n${JSON.stringify(data)}`);
-  return;
+        alert("データがありません");
+        return;
       }
 
       const prices = data.data;
+
       const labels = prices.map(item => item.Date);
       const closePrices = prices.map(item => item.C);
 
       drawChart(code, label, labels, closePrices);
 
     } catch (error) {
-      if (error.name === "AbortError") {
-        return;
-      }
-
       if (requestId !== currentRequestId) {
         return;
       }
 
       console.error(error);
-      alert(`通信エラー: ${error.message}`);
+      alert("通信エラー");
     } finally {
       if (requestId === currentRequestId) {
-        abortController = null;
         setLoadingState(false);
       }
     }
