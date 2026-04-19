@@ -86,6 +86,13 @@ body.is-loading .loading-blocker {
 #resultList.is-loading {
   opacity: 0.6;
 }
+.loading-blocker {
+  display: none !important;
+}
+
+body.is-loading .loading-blocker {
+  display: none !important;
+}
 
 pointer-events: auto;
 
