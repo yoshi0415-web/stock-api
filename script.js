@@ -64,15 +64,18 @@ function disableInteractionBlock() {
   });
 
   function setLoadingState(loading) {
-    isLoading = loading;
+  isLoading = loading;
 
-    if (loading) {
-      document.body.classList.add("is-loading");
-      resultList.classList.add("is-loading");
-    } else {
-      document.body.classList.remove("is-loading");
-      resultList.classList.remove("is-loading");
-    }
+  if (loading) {
+    document.body.classList.add("is-loading");
+    resultList.classList.add("is-loading");
+    enableInteractionBlock();
+  } else {
+    document.body.classList.remove("is-loading");
+    resultList.classList.remove("is-loading");
+    disableInteractionBlock();
+  }
+}
   }
 
   function showStockList(codes, label) {
