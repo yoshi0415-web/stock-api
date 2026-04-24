@@ -75,34 +75,36 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function showStockList(codes, label) {
-    resultList.innerHTML = "";
+  resultList.innerHTML = "";
 
-    for (const code of codes) {
-      const li = document.createElement("li");
+  for (const code of codes) {
+    const li = document.createElement("li");
 
-      let name = STOCK_NAMES[code] || "";
+    let name = STOCK_NAMES[code] || "";
 
-      if (name.length > 12) {
-        name = name.slice(0, 12) + "…";
-      }
-
-      const line1 = name.slice(0, 6);
-      const line2 = name.slice(6);
-
-      li.innerHTML = `
-        <span class="stock-code">${code}</span>
-        <span class="stock-name">${line1}</span>
-        <span class="stock-name">${line2}</span>
-      `;
-
-      li.addEventListener("click", () => {
-        if (isLoading) return;
-        loadChart(code, label);
-      });
-
-      resultList.appendChild(li);
+    if (name.length > 12) {
+      name = name.slice(0, 12) + "…";
     }
+
+    const line1 = "";
+    const line2 = name.slice(0, 6);
+    const line3 = name.slice(6);
+
+    li.innerHTML = `
+      <span class="stock-code">${code}</span>
+      <span class="stock-name">${line1}</span>
+      <span class="stock-name">${line2}</span>
+      <span class="stock-name">${line3}</span>
+    `;
+
+    li.addEventListener("click", () => {
+      if (isLoading) return;
+      loadChart(code, label);
+    });
+
+    resultList.appendChild(li);
   }
+}
 
   function drawChart(code, label, labels, closePrices) {
     if (chart) {
