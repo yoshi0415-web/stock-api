@@ -131,6 +131,33 @@ body.is-loading .loading-blocker {
 
 grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 
+#resultList li {
+  background: #fff;
+  padding: 8px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.stock-code {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.stock-name {
+  font-size: 11px;
+  line-height: 1.2;
+  color: #555;
+  text-align: center;
+  width: 100%;
+}
+
 /* 左下バージョン */
 .version-text {
   position: fixed;
