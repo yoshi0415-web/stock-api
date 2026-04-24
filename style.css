@@ -96,6 +96,23 @@ body.is-loading .loading-blocker {
 
 pointer-events: auto;
 
+.log-section {
+  margin-top: 16px;
+  background: #111;
+  color: #0f0;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 12px;
+}
+
+#logArea {
+  margin: 0;
+  white-space: pre-wrap;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
 canvas {
   max-width: 100%;
 }
