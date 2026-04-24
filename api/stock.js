@@ -27,14 +27,6 @@ function getDateRange() {
   };
 }
 
-  from.setDate(from.getDate() - 60);
-
-  return {
-    from: formatDate(from),
-    to: formatDate(to)
-  };
-}
-
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -109,7 +101,6 @@ async function fetchStockWithRateLimit(apiKey, code) {
 
 async function fetchStock(apiKey, code) {
   const jquantsCode = code.endsWith("0") ? code : `${code}0`;
-
   const range = getDateRange();
 
   const url =
