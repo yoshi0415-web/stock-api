@@ -63,7 +63,7 @@ export default async function handler(req, res) {
 }
 
 async function fetchStockWithRateLimit(apiKey, code) {
-  const MIN_INTERVAL_MS = 2500;
+  const MIN_INTERVAL_MS = 1200;
 
   const now = Date.now();
   const elapsed = now - lastJquantsAccessAt;
@@ -78,7 +78,7 @@ async function fetchStockWithRateLimit(apiKey, code) {
     return await fetchStock(apiKey, code);
   } catch (error) {
     if (String(error.message).includes("Rate limit")) {
-      await wait(4000);
+      await wait(1800);
       return await fetchStock(apiKey, code);
     }
 
