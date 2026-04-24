@@ -172,15 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       addLog(`HTTP応答: ${response.status}`);
 
-      const text = await response.text();
-let data;
-
-try {
-  data = JSON.parse(text);
-} catch (e) {
-  addLog(`JSON変換失敗: ${text.slice(0, 100)}`);
-  throw new Error("APIがJSON以外を返しました");
-}
+      const data = await response.json();
 
       if (requestId !== currentRequestId) {
         addLog(`旧通信無視: ${code}`);
