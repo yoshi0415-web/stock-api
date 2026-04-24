@@ -4,16 +4,18 @@ self.addEventListener("install", event => {
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    clients.claim().then(() =>
+    Promise.all([
+      clients.claim(),
       caches.keys().then(keys =>
         Promise.all(keys.map(key => caches.delete(key)))
       )
-    )
+    ])
   );
 });
 
 self.addEventListener("fetch", event => {
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    fetch(event.request, { cache: "no-store" })
+      .catch(() => caches.match(event.request))
   );
 });
