@@ -16,10 +16,16 @@ function formatDate(date) {
 }
 
 function getDateRange() {
-  const today = new Date();
+  const to = new Date("2026-01-31");
+  const from = new Date("2026-01-31");
 
-  const to = new Date(today);
-  const from = new Date(today);
+  from.setDate(from.getDate() - 60);
+
+  return {
+    from: formatDate(from),
+    to: formatDate(to)
+  };
+}
 
   from.setDate(from.getDate() - 60);
 
