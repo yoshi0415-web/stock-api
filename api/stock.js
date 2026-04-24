@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   try {
     const apiKey = process.env.JQUANTS_API_KEY;
-    const code = (req.query.code || "7203").trim();
+    const code = String(req.query.code || "7203").trim();
 
     if (!apiKey) {
       return res.status(500).json({ error: "APIキー未設定" });
@@ -15,30 +15,27 @@ export default async function handler(req, res) {
     const now = Date.now();
     const CACHE_MS = 10000;
 
-    // 10秒以内ならキャッシュ返す
     if (cache[code] && now - cache[code].time < CACHE_MS) {
       return res.status(200).json(cache[code].data);
     }
 
-    // 同じ銘柄の通信中なら、その結果を待って返す
     if (inFlight[code]) {
       const data = await inFlight[code];
       return res.status(200).json(data);
     }
 
-    inFlight[code] = fetchFromJQuants(apiKey, code);
+    inFlight[code] = fetchStock(apiKey, code);
 
     try {
       const data = await inFlight[code];
 
       cache[code] = {
         time: Date.now(),
-        data: data
+        data
       };
 
       return res.status(200).json(data);
     } catch (error) {
-      // rate limit時は古いキャッシュがあればそれを返す
       if (cache[code]) {
         return res.status(200).json(cache[code].data);
       }
@@ -59,25 +56,29 @@ export default async function handler(req, res) {
   }
 }
 
-async function fetchFromJQuants(apiKey, code) {
-  const response = await fetch(
-  `https://api.jquants.com/v2/equities/bars/daily?code=${code}0&from=20240131&to=20240210`code=${code}0&from=20240125&to=20240130`,
-    {
-      headers: {
-        "x-api-key": apiKey
-      }
+async function fetchStock(apiKey, code) {
+  const jquantsCode = code.endsWith("0") ? code : `${code}0`;
+
+  const url =
+    `https://api.jquants.com/v2/equities/bars/daily?code=${jquantsCode}&from=20240131&to=20240210`;
+
+  const response = await fetch(url, {
+    headers: {
+      "x-api-key": apiKey
     }
-  );
+  });
 
-  const data = await response.json();
+  const text = await response.text();
 
-  // J-Quantsのrate limitやエラーを明示的に失敗扱い
-  if (!response.ok) {
-    throw new Error(data?.message || `HTTP ${response.status}`);
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(`JSON変換失敗: ${text.slice(0, 100)}`);
   }
 
-  if (data?.message && data.message.includes("Rate limit exceeded")) {
-    throw new Error(data.message);
+  if (!response.ok) {
+    throw new Error(data.message || `HTTP ${response.status}`);
   }
 
   return data;
