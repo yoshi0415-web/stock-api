@@ -1,3 +1,4 @@
+alert("script.js読み込みOK");
 document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
   let isLoading = false;
