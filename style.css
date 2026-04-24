@@ -145,19 +145,23 @@ grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 }
 
 .stock-code {
-  font-size: 14px;
+  display: block;
+  font-size: 20px;
   font-weight: bold;
-  line-height: 1.2;
+  line-height: 1.1;
+}
+
+.stock-name-wrap {
+  display: block;
+  margin-top: 4px;
 }
 
 .stock-name {
+  display: block;
   font-size: 11px;
   line-height: 1.2;
   color: #555;
-  text-align: center;
-  width: 100%;
 }
-
 /* 左下バージョン */
 .version-text {
   position: fixed;
