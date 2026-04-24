@@ -1,4 +1,3 @@
-alert("script.js読み込みOK");
 document.addEventListener("DOMContentLoaded", () => {
   let chart = null;
   let isLoading = false;
@@ -25,15 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "9984": "ソフトバンクグループ",
     "9432": "NTT"
   };
-
-let name = STOCK_NAMES[code] || "";
-
-if (name.length > 12) {
-  name = name.slice(0, 12) + "…";
-}
-
-const line1 = name.slice(0, 6);
-const line2 = name.slice(6);
 
   function setActiveButton(activeButton) {
     [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
@@ -89,20 +79,22 @@ const line2 = name.slice(6);
 
     for (const code of codes) {
       const li = document.createElement("li");
+
       let name = STOCK_NAMES[code] || "";
 
-if (name.length > 12) {
-  name = name.slice(0, 12) + "…";
-}
+      if (name.length > 12) {
+        name = name.slice(0, 12) + "…";
+      }
 
-const line1 = name.slice(0, 6);
-const line2 = name.slice(6);
+      const line1 = name.slice(0, 6);
+      const line2 = name.slice(6);
 
-li.innerHTML = `
-  <span class="stock-code">${code}</span>
-  <span class="stock-name">${line1}</span>
-  <span class="stock-name">${line2}</span>
-`;
+      li.innerHTML = `
+        <span class="stock-code">${code}</span>
+        <span class="stock-name">${line1}</span>
+        <span class="stock-name">${line2}</span>
+      `;
+
       li.addEventListener("click", () => {
         if (isLoading) return;
         loadChart(code, label);
