@@ -61,7 +61,7 @@ export default async function handler(req, res) {
 
 async function fetchFromJQuants(apiKey, code) {
   const response = await fetch(
-    `https://api.jquants.com/v2/equities/bars/daily?code=${code}0&from=20240125&to=20240130`,
+  `https://api.jquants.com/v2/equities/bars/daily?code=${code}0&from=20240131&to=20240210`code=${code}0&from=20240125&to=20240130`,
     {
       headers: {
         "x-api-key": apiKey
