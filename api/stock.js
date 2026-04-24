@@ -1,6 +1,12 @@
 const cache = {};
 const inFlight = {};
 
+let lastJquantsAccessAt = 0;
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -13,7 +19,7 @@ export default async function handler(req, res) {
     }
 
     const now = Date.now();
-    const CACHE_MS = 10000;
+    const CACHE_MS = 5 * 60 * 1000; // 5分キャッシュ
 
     if (cache[code] && now - cache[code].time < CACHE_MS) {
       return res.status(200).json(cache[code].data);
@@ -24,7 +30,7 @@ export default async function handler(req, res) {
       return res.status(200).json(data);
     }
 
-    inFlight[code] = fetchStock(apiKey, code);
+    inFlight[code] = fetchStockWithRateLimit(apiKey, code);
 
     try {
       const data = await inFlight[code];
@@ -56,6 +62,30 @@ export default async function handler(req, res) {
   }
 }
 
+async function fetchStockWithRateLimit(apiKey, code) {
+  const MIN_INTERVAL_MS = 2500;
+
+  const now = Date.now();
+  const elapsed = now - lastJquantsAccessAt;
+
+  if (elapsed < MIN_INTERVAL_MS) {
+    await wait(MIN_INTERVAL_MS - elapsed);
+  }
+
+  lastJquantsAccessAt = Date.now();
+
+  try {
+    return await fetchStock(apiKey, code);
+  } catch (error) {
+    if (String(error.message).includes("Rate limit")) {
+      await wait(4000);
+      return await fetchStock(apiKey, code);
+    }
+
+    throw error;
+  }
+}
+
 async function fetchStock(apiKey, code) {
   const jquantsCode = code.endsWith("0") ? code : `${code}0`;
 
@@ -79,6 +109,10 @@ async function fetchStock(apiKey, code) {
 
   if (!response.ok) {
     throw new Error(data.message || `HTTP ${response.status}`);
+  }
+
+  if (data.message && data.message.includes("Rate limit")) {
+    throw new Error(data.message);
   }
 
   return data;
