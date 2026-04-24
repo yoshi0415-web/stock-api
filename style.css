@@ -113,6 +113,12 @@ pointer-events: auto;
   overflow-y: auto;
 }
 
+.show-button.active {
+  background: #0b8f3a;
+  color: #ffffff;
+  font-weight: bold;
+}
+
 canvas {
   max-width: 100%;
 }
