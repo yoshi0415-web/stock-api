@@ -88,9 +88,14 @@ body {
   transform: scale(0.99);
 }
 
-#resultList.is-loading {
-  opacity: 0.6;
-  pointer-events: none;
+#resultList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
 }
 
 /* チャート */
