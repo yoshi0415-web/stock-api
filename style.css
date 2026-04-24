@@ -129,6 +129,8 @@ body.is-loading .loading-blocker {
   display: block;
 }
 
+grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+
 /* 左下バージョン */
 .version-text {
   position: fixed;
