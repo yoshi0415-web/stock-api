@@ -86,15 +86,15 @@ document.addEventListener("DOMContentLoaded", () => {
       name = name.slice(0, 12) + "…";
     }
 
-    const line1 = "";
-    const line2 = name.slice(0, 6);
-    const line3 = name.slice(6);
+    const line1 = name.slice(0, 6);
+    const line2 = name.slice(6);
 
     li.innerHTML = `
       <span class="stock-code">${code}</span>
-      <span class="stock-name">${line1}</span>
-      <span class="stock-name">${line2}</span>
-      <span class="stock-name">${line3}</span>
+      <span class="stock-name-wrap">
+        <span class="stock-name">${line1}</span>
+        <span class="stock-name">${line2}</span>
+      </span>
     `;
 
     li.addEventListener("click", () => {
