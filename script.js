@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultList = document.getElementById("resultList");
   const chartCanvas = document.getElementById("chart");
   const chartTitle = document.getElementById("chartTitle");
+  const logArea = document.getElementById("logArea");
 
   const WATCH_CODES = ["7203", "6758", "7974", "9984", "9432"];
 
@@ -25,23 +26,50 @@ document.addEventListener("DOMContentLoaded", () => {
     "9432": "NTT"
   };
 
+  function addLog(message) {
+    const time = new Date().toLocaleTimeString("ja-JP");
+
+    logArea.textContent += `${time} ${message}\n`;
+    logArea.scrollTop = logArea.scrollHeight;
+  }
+
   risingButton.addEventListener("click", () => {
-    if (isLoading) return;
+    if (isLoading) {
+      addLog("上昇中クリック無効（読込中）");
+      return;
+    }
+
+    addLog("条件クリック: 上昇中");
     showStockList(WATCH_CODES, "上昇中");
   });
 
   fallingButton.addEventListener("click", () => {
-    if (isLoading) return;
+    if (isLoading) {
+      addLog("下落中クリック無効（読込中）");
+      return;
+    }
+
+    addLog("条件クリック: 下落中");
     showStockList(WATCH_CODES, "下落中");
   });
 
   bullishButton.addEventListener("click", () => {
-    if (isLoading) return;
+    if (isLoading) {
+      addLog("陽線連続クリック無効（読込中）");
+      return;
+    }
+
+    addLog("条件クリック: 陽線連続");
     showStockList(WATCH_CODES, "陽線連続");
   });
 
   volumeButton.addEventListener("click", () => {
-    if (isLoading) return;
+    if (isLoading) {
+      addLog("出来高増クリック無効（読込中）");
+      return;
+    }
+
+    addLog("条件クリック: 出来高増");
     showStockList(WATCH_CODES, "出来高増");
   });
 
@@ -51,21 +79,30 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loading) {
       document.body.classList.add("is-loading");
       resultList.classList.add("is-loading");
+      addLog("読込開始");
     } else {
       document.body.classList.remove("is-loading");
       resultList.classList.remove("is-loading");
+      lastRequestAt = Date.now();
+      addLog("読込終了");
     }
   }
 
   function showStockList(codes, label) {
     resultList.innerHTML = "";
+    addLog(`候補一覧表示: ${label}`);
 
     for (const code of codes) {
       const li = document.createElement("li");
       li.textContent = `${code} ${STOCK_NAMES[code] || ""}`;
 
       li.addEventListener("click", () => {
-        if (isLoading) return;
+        if (isLoading) {
+          addLog(`候補クリック無効: ${code}`);
+          return;
+        }
+
+        addLog(`候補クリック: ${code}`);
         loadChart(code, label);
       });
 
@@ -76,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function drawChart(code, label, labels, closePrices) {
     if (chart) {
       chart.destroy();
+      addLog("旧チャート破棄");
     }
 
     chartTitle.textContent =
@@ -102,21 +140,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
+
+    addLog(`チャート描画完了: ${code}`);
   }
 
   async function loadChart(code, label) {
     const now = Date.now();
 
-    if (isLoading) return;
+    if (isLoading) {
+      addLog(`通信拒否（読込中）: ${code}`);
+      return;
+    }
 
-    // 3秒以内の再クリック無効
     if (now - lastRequestAt < MIN_COOLDOWN_MS) {
+      addLog(`通信拒否（クールダウン中）: ${code}`);
       return;
     }
 
     lastRequestAt = now;
 
     const requestId = ++currentRequestId;
+    addLog(`通信開始: ${code}`);
+
     setLoadingState(true);
 
     try {
@@ -124,19 +169,24 @@ document.addEventListener("DOMContentLoaded", () => {
         `https://kabutree.vercel.app/api/stock?code=${code}`
       );
 
+      addLog(`HTTP応答: ${response.status}`);
+
       const data = await response.json();
 
       if (requestId !== currentRequestId) {
+        addLog(`旧通信無視: ${code}`);
         return;
       }
 
       if (!data || !Array.isArray(data.data) || data.data.length === 0) {
+        addLog(`データなし: ${JSON.stringify(data)}`);
         alert("データがありません");
         return;
       }
 
-      const prices = data.data;
+      addLog(`データ取得成功: ${data.data.length}件`);
 
+      const prices = data.data;
       const labels = prices.map(item => item.Date);
       const closePrices = prices.map(item => item.C);
 
@@ -144,10 +194,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } catch (error) {
       if (requestId !== currentRequestId) {
+        addLog(`旧通信エラー無視: ${code}`);
         return;
       }
 
       console.error(error);
+      addLog(`通信エラー: ${error.message}`);
       alert("通信エラー");
     } finally {
       if (requestId === currentRequestId) {
@@ -155,4 +207,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
+
+  addLog("script.js 読み込み完了");
 });
