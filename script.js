@@ -25,6 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
     "9432": "NTT"
   };
 
+let name = STOCK_NAMES[code] || "";
+
+if (name.length > 12) {
+  name = name.slice(0, 12) + "…";
+}
+
+const line1 = name.slice(0, 6);
+const line2 = name.slice(6);
+
   function setActiveButton(activeButton) {
     [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
       button.classList.remove("active");
