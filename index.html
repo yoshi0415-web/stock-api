@@ -11,20 +11,33 @@
   <meta name="theme-color" content="#000000">
 
   <link rel="stylesheet" href="style.css">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
   <main class="app">
+
     <header class="app-header">
       <h1 class="app-title">🌳 株ツリー</h1>
     </header>
 
     <section class="filters">
-      <button id="risingButton" class="show-button" type="button">上昇中</button>
-      <button id="fallingButton" class="show-button" type="button">下落中</button>
-      <button id="bullishButton" class="show-button" type="button">陽線連続</button>
-      <button id="volumeButton" class="show-button" type="button">出来高増</button>
+      <button id="risingButton" class="show-button" type="button">
+        上昇中
+      </button>
+
+      <button id="fallingButton" class="show-button" type="button">
+        下落中
+      </button>
+
+      <button id="bullishButton" class="show-button" type="button">
+        陽線連続
+      </button>
+
+      <button id="volumeButton" class="show-button" type="button">
+        出来高増
+      </button>
     </section>
 
     <section class="result-section">
@@ -40,11 +53,12 @@
   </main>
 
   <div class="version-text">
-    Ver 2026.04.25-5
+    Ver 2026.04.25-6
   </div>
 
   <div id="loadingBlocker" class="loading-blocker"></div>
 
+  <script src="debug.js"></script>
   <script src="script.js"></script>
 
   <script>
@@ -52,7 +66,6 @@
       navigator.serviceWorker.register("/sw.js");
     }
   </script>
-  <script src="debug.js"></script>
-<script src="script.js"></script>
+
 </body>
 </html>
