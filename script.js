@@ -25,6 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "9432": "NTT"
   };
 
+function setActiveButton(activeButton) {
+  [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
+    button.classList.remove("active");
+  });
+
+  activeButton.classList.add("active");
+}
+
   risingButton.addEventListener("click", () => {
     if (isLoading) return;
     logCondition("上昇中");
