@@ -92,7 +92,7 @@ li.innerHTML = `
   </span>
 `;
 /* 065 */ 
-/* 066 */     li.addEventListener("click", () => {
+/* 066 */     li.addEventListener("click", async () => {
 /* 067 */       logCandidate(code);
 /* 068 */ 
 /* 069 */       if (isLoading) {
@@ -100,8 +100,32 @@ li.innerHTML = `
 /* 071 */         return;
 /* 072 */       }
 /* 073 */ 
-/* 074 */       loadChart(code, label);
-/* 075 */     });
+/* 074 */       setLoadingState(true);
+/* 075 */ 
+/* 075-1 */       try {
+/* 075-2 */         const allStocks = await getAllStocks();
+/* 075-3 */         const stock = allStocks[code];
+/* 075-4 */ 
+/* 075-5 */         if (!stock || !Array.isArray(stock.data) || stock.data.length === 0) {
+/* 075-6 */           logNoData(stock);
+/* 075-7 */           showDebugLogs();
+/* 075-8 */           return;
+/* 075-9 */         }
+/* 075-10 */ 
+/* 075-11 */         const prices = stock.data;
+/* 075-12 */         const labels = prices.map(item => item.Date);
+/* 075-13 */         const closePrices = prices.map(item => item.C);
+/* 075-14 */ 
+/* 075-15 */         drawChart(code, label, labels, closePrices);
+/* 075-16 */ 
+/* 075-17 */       } catch (error) {
+/* 075-18 */         logError(error);
+/* 075-19 */         showDebugLogs();
+/* 075-20 */ 
+/* 075-21 */       } finally {
+/* 075-22 */         setLoadingState(false);
+/* 075-23 */       }
+/* 075-24 */     });
 /* 076 */ 
 /* 077 */     return li;
 /* 078 */   }
