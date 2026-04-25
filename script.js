@@ -36,6 +36,20 @@
 /* 026-9 */     "9984": "SBG",
 /* 026-10 */     "9432": "NTT"
 /* 026-11 */   };
+/* 026-12 */ 
+/* 026-13 */   let allStocksCache = null;
+/* 026-14 */ 
+/* 026-15 */   async function getAllStocks() {
+/* 026-16 */     if (allStocksCache) {
+/* 026-17 */       return allStocksCache;
+/* 026-18 */     }
+/* 026-19 */ 
+/* 026-20 */     const response = await fetch("/api/stocks");
+/* 026-21 */     const data = await response.json();
+/* 026-22 */ 
+/* 026-23 */     allStocksCache = data;
+/* 026-24 */     return data;
+/* 026-25 */   }
 /* 027 */ 
 /* 028 */   function setActiveButton(activeButton) {
 /* 029 */     [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
