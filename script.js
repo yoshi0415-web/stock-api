@@ -207,10 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
       drawChart(code, label, labels, closePrices);
 
     } catch (error) {
-      if (requestId !== currentRequestId) return;
+  if (requestId !== currentRequestId) return;
 
-      alert("通信エラー");
-
+  alert("通信エラー: " + error.message);
+}
     } finally {
       if (requestId === currentRequestId) {
         setLoadingState(false);
