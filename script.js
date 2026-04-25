@@ -109,17 +109,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setLoadingState(loading) {
-    isLoading = loading;
+  isLoading = loading;
 
-    if (loading) {
-      document.body.classList.add("is-loading");
-      resultList.classList.add("is-loading");
-    } else {
-      document.body.classList.remove("is-loading");
-      resultList.classList.remove("is-loading");
-      lastRequestAt = Date.now();
-    }
+  if (loading) {
+    document.body.classList.add("is-loading");
+    resultList.classList.add("is-loading");
+
+    chartTitle.textContent = "読み込み中...";
+
+  } else {
+    document.body.classList.remove("is-loading");
+    resultList.classList.remove("is-loading");
+
+    lastRequestAt = Date.now();
   }
+}
 
   risingButton.addEventListener("click", async () => {
     if (isLoading) return;
