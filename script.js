@@ -163,9 +163,6 @@ li.innerHTML = `
 /* 163 */     setActiveButton(bullishButton);
 /* 164 */     clearChart("出来高急増");
 /* 165 */ 
-/* 166 */     showStockList(WATCH_CODES, "出来高急増");
-/* 167 */   });
-/* 168 */ 
 /* 169 */   volumeButton.addEventListener("click", () => {
 /* 170 */     if (isLoading) return;
 /* 171 */ 
@@ -173,7 +170,7 @@ li.innerHTML = `
 /* 173 */     setActiveButton(volumeButton);
 /* 174 */     clearChart("高値更新");
 /* 175 */ 
-/* 176 */     showStockList(WATCH_CODES, "高値更新");
+/* 176 */     document.getElementById("highSubFilters").classList.add("show");
 /* 177 */   });
 /* 178 */ 
 /* 179 */   function drawChart(code, label, labels, closePrices) {
