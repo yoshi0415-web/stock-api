@@ -120,35 +120,35 @@ li.innerHTML = `
 /* 091 */     chartTitle.textContent = "読み込み中...";
 /* 092 */     logList(label);
 /* 093 */ 
-/* 094 */     for (const code of WATCH_CODES) {
-/* 095 */       try {
-/* 096 */         const response = await fetch(
-/* 097 */           `https://kabutree.vercel.app/api/stock?code=${code}`
-/* 098 */         );
+/* 094 */     try {
+/* 095 */       const allStocks = await getAllStocks();
+/* 096 */ 
+/* 097 */       for (const code of WATCH_CODES) {
+/* 098 */         const stock = allStocks[code];
 /* 099 */ 
-/* 100 */         const data = await response.json();
-/* 101 */ 
-/* 102 */         if (!data.data || data.data.length < 3) {
-/* 103 */           continue;
-/* 104 */         }
-/* 105 */ 
-/* 106 */         if (judgeFunction(data.data)) {
-/* 107 */           resultList.appendChild(createStockItem(code, label));
-/* 108 */         }
-/* 109 */ 
-/* 110 */       } catch (error) {
-/* 111 */         logError(error);
-/* 112 */       }
-/* 113 */     }
-/* 114 */ 
-/* 115 */     if (resultList.children.length === 0) {
-/* 116 */       resultList.innerHTML = "<li>該当なし</li>";
-/* 117 */       clearChart(`${label} : 該当なし`);
-/* 118 */     } else {
-/* 119 */       chartTitle.textContent = label;
-/* 120 */     }
-/* 121 */   }
-/* 122 */ 
+/* 100 */         if (!stock || !stock.data || stock.data.length < 3) {
+/* 101 */           continue;
+/* 102 */         }
+/* 103 */ 
+/* 104 */         if (judgeFunction(stock.data)) {
+/* 105 */           resultList.appendChild(createStockItem(code, label));
+/* 106 */         }
+/* 107 */       }
+/* 108 */ 
+/* 109 */       if (resultList.children.length === 0) {
+/* 110 */         resultList.innerHTML = "<li>該当なし</li>";
+/* 111 */         clearChart(`${label} : 該当なし`);
+/* 112 */       } else {
+/* 113 */         chartTitle.textContent = label;
+/* 114 */       }
+/* 115 */ 
+/* 116 */     } catch (error) {
+/* 117 */       logError(error);
+/* 118 */       resultList.innerHTML = "<li>取得エラー</li>";
+/* 119 */       clearChart(`${label} : 取得エラー`);
+/* 120 */       showDebugLogs();
+/* 121 */     }
+/* 122 */   }
 /* 123 */   function setLoadingState(loading) {
 /* 124 */     isLoading = loading;
 /* 125 */ 
