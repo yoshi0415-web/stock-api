@@ -65,7 +65,11 @@
 alert("script.js読み込み直前");
 </script>
 
-<script src="script.js?v=27"></script>
+<script
+  src="script.js?v=27"
+  onload="alert('script.js読込成功')"
+  onerror="alert('script.js読込失敗')"
+></script>
 
 </body>
 </html>
