@@ -1,4 +1,3 @@
-alert("script.js開始");
 /* 001 */ document.addEventListener("DOMContentLoaded", () => {
 /* 002 */   let chart = null;
 /* 003 */   let isLoading = false;
