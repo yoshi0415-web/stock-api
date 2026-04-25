@@ -163,23 +163,6 @@ grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   color: #555;
 }
 
-.log-section {
-  margin-top: 16px;
-  background: #111;
-  color: #0f0;
-  padding: 12px;
-  border-radius: 12px;
-  text-align: left;
-  font-size: 12px;
-}
-
-#logArea {
-  margin: 0;
-  white-space: pre-wrap;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
 /* 左下バージョン */
 .version-text {
   position: fixed;
