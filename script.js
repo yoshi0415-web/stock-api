@@ -15,7 +15,8 @@
 /* 014 */   const resultList = document.getElementById("resultList");
 /* 015 */   const chartCanvas = document.getElementById("chart");
 /* 016 */   const chartTitle = document.getElementById("chartTitle");
-/* 017 */ 
+/* 017 */   const chartTitle = document.getElementById("chartTitle");
+/* 017-1 */ const chartSection = document.querySelector(".chart-section");
 /* 018 */   const WATCH_CODES = [
 /* 019 */     "7203","6758","7974","9984","9432",
 /* 020 */     "8306","8316","8411","6501","6503",
@@ -72,6 +73,16 @@
 /* 043 */     chartTitle.textContent = titleText;
 /* 044 */   }
 /* 045 */ 
+/* 045-1 */ function moveChartUnderItem(li) {
+/* 045-2 */   const old = document.querySelector(".inline-chart-wrapper");
+/* 045-3 */   if (old) old.remove();
+/* 045-4 */ 
+/* 045-5 */   const wrap = document.createElement("li");
+/* 045-6 */   wrap.className = "inline-chart-wrapper";
+/* 045-7 */ 
+/* 045-8 */   li.insertAdjacentElement("afterend", wrap);
+/* 045-9 */   wrap.appendChild(chartSection);
+/* 045-10 */ }
 /* 046 */   function createStockItem(code, label) {
 /* 047 */     const li = document.createElement("li");
 /* 048 */ 
@@ -100,8 +111,9 @@ li.innerHTML = `
 /* 071 */         return;
 /* 072 */       }
 /* 073 */ 
-/* 074 */       setLoadingState(true);
-/* 075 */ 
+/* 073-1 */     moveChartUnderItem(li);
+/* 074 */       loadChart(code, label);
+/* 075 */     });
 /* 075-1 */       try {
 /* 075-2 */         const allStocks = await getAllStocks();
 /* 075-3 */         const stock = allStocks[code];
