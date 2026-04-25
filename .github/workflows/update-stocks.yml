@@ -24,10 +24,11 @@ jobs:
           JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
         run: node scripts/update-stocks.js
 
-      - name: Commit updated stocks.json
+           - name: Commit updated stocks.json
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add stocks.json
           git commit -m "Update stocks.json" || echo "No changes"
+          git pull --rebase
           git push
