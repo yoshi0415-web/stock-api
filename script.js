@@ -79,8 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function showFilteredStocks(label, judgeFunction) {
-    resultList.innerHTML = "";
+  resultList.innerHTML = "";
+  chartTitle.textContent = "読み込み中...";
 
+  for (const code of WATCH_CODES) {
     for (const code of WATCH_CODES) {
       try {
         const response = await fetch(
