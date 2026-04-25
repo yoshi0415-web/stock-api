@@ -53,20 +53,27 @@
   </main>
 
   <div class="version-text">
-    Ver 2026.04.25-30-1
+    Ver 2026.04.25-31
   </div>
 
   <div id="loadingBlocker" class="loading-blocker"></div>
 
-<script src="debug.js?v=30"></script>
-<script src="conditions.js?v=30"></script>
+<script src="debug.js?v=27"></script>
+<script src="conditions.js?v=27"></script>
 
 <script>
-alert("script.js読み込み直前");
+window.onerror = function(message, source, lineno, colno, error) {
+  alert(
+    "JSエラー\n" +
+    message + "\n" +
+    "行: " + lineno + "\n" +
+    "列: " + colno
+  );
+};
 </script>
 
 <script
-  src="script.js?v=30"
+  src="script.js?v=27"
   onload="alert('script.js読込成功')"
   onerror="alert('script.js読込失敗')"
 ></script>
