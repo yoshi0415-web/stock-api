@@ -46,12 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  risingButton.addEventListener("click", () => {
-    if (isLoading) return;
+  risingButton.addEventListener("click", async () => {
+  if (isLoading) return;
 
-    setActiveButton(risingButton);
-    showStockList(WATCH_CODES, "赤三兵");
-  });
+  setActiveButton(risingButton);
+  await showFilteredStocks("赤三兵", isRedThreeSoldiers);
+});
 
   fallingButton.addEventListener("click", () => {
     if (isLoading) return;
