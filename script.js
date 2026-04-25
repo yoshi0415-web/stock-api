@@ -160,9 +160,9 @@ li.innerHTML = `
 /* 160 */   volumeButton.addEventListener("click", () => {
 /* 161 */     setActiveButton(volumeButton);
 /* 162 */     clearChart("高値更新");
-/* 163 */     document.getElementById("highSubFilters").classList.add("show");
-/* 164 */   });
-/* 165 */ 
+/* 163 */     resultList.innerHTML = "";
+/* 164 */     document.getElementById("highSubFilters").classList.add("show");
+/* 165 */   });
 /* 166 */   high25Button.addEventListener("click", async () => {
 /* 167 */     clearChart("高値更新 25日");
 /* 168 */     await showFilteredStocks("高値更新 25日", isBreakHigh25);
