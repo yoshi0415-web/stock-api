@@ -63,7 +63,17 @@
 <script src="script.js?v=27"></script>
 
 <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(reg => reg.unregister());
+  });
+}
+</script>
+
+<script>
 alert("HTML最後まで読込OK");
 </script>
+
+
 </body>
 </html>
