@@ -87,6 +87,19 @@ document.addEventListener("DOMContentLoaded", () => {
         if (judgeFunction(data.data)) {
           resultList.appendChild(createStockItem(code, label));
         }
+        
+        if (resultList.children.length === 0) {
+  resultList.innerHTML = "<li>該当なし</li>";
+
+  chartTitle.textContent = `${label} : 該当なし`;
+
+  if (chart) {
+    chart.destroy();
+    chart = null;
+  }
+
+  return;
+}
 
       } catch (error) {
         console.log(error);
