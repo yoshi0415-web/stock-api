@@ -201,8 +201,9 @@ grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   line-height: 1.35;
   text-align: left;
 }
-.notice-box {
-  margin: 4px auto 8px;
+.notice-box p {
+  margin: 0;
+  line-height: 1.1;
 }
 
 /* 左下バージョン */
