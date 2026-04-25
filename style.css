@@ -163,6 +163,33 @@ grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   color: #555;
 }
 
+.sub-filters {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: -8px 0 18px;
+}
+
+.sub-filters.show {
+  display: flex;
+}
+
+.sub-button {
+  padding: 6px 10px;
+  font-size: 12px;
+  border: none;
+  border-radius: 999px;
+  background: #e6e6e6;
+  color: #222;
+}
+
+.sub-button.active {
+  background: #0b8f3a;
+  color: #fff;
+  font-weight: bold;
+}
+
 /* 左下バージョン */
 .version-text {
   position: fixed;
