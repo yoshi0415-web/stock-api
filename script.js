@@ -164,6 +164,9 @@ li.innerHTML = `
 /* 163 */     setActiveButton(bullishButton);
 /* 164 */     clearChart("出来高急増");
 /* 165 */ 
+/* 166 */     showStockList(WATCH_CODES, "出来高急増");
+/* 167 */   });
+/* 168 */ 
 /* 169 */   volumeButton.addEventListener("click", () => {
 /* 170 */     if (isLoading) return;
 /* 171 */ 
