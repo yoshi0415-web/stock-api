@@ -40,21 +40,154 @@
 /* 040 */   let allStocksCache = null;
 /* 041 */ 
 /* 042 */   async function getAllStocks() {
-/* 043 */     if (allStocksCache) {
-/* 044 */       return allStocksCache;
-/* 045 */     }
-/* 046 */ 
-/* 047 */     const response = await fetch("/stocks.json");
-/* 048 */     const data = await response.json();
-/* 049 */ 
-/* 050 */     allStocksCache = data;
-/* 051 */     return data;
-/* 052 */   }
-/* 053 */ 
-/* 054 */   function setActiveButton(activeButton) {
-/* 055 */     [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
-/* 056 */       button.classList.remove("active");
-/* 057 */     });
-/* 058 */ 
-/* 059 */     activeButton.classList.add("active");
-/* 060 */   });
+/* 043 */     if (allStocksCache) return allStocksCache;
+/* 044 */ 
+/* 045 */     const response = await fetch("/stocks.json");
+/* 046 */     const data = await response.json();
+/* 047 */ 
+/* 048 */     allStocksCache = data;
+/* 049 */     return data;
+/* 050 */   }
+/* 051 */ 
+/* 052 */   function setActiveButton(activeButton) {
+/* 053 */     [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
+/* 054 */       button.classList.remove("active");
+/* 055 */     });
+/* 056 */ 
+/* 057 */     activeButton.classList.add("active");
+/* 058 */   }
+/* 059 */ 
+/* 060 */   function hideHighSubFilters() {
+/* 061 */     document.getElementById("highSubFilters").classList.remove("show");
+/* 062 */   }
+/* 063 */ 
+/* 064 */   function clearChart(titleText = "チャート") {
+/* 065 */     if (chart) {
+/* 066 */       chart.destroy();
+/* 067 */       chart = null;
+/* 068 */     }
+/* 069 */ 
+/* 070 */     chartTitle.textContent = titleText;
+/* 071 */   }
+/* 072 */ 
+/* 073 */   function moveChartUnderItem(li) {
+/* 074 */     const old = document.querySelector(".inline-chart-wrapper");
+/* 075 */     if (old) old.remove();
+/* 076 */ 
+/* 077 */     const wrap = document.createElement("li");
+/* 078 */     wrap.className = "inline-chart-wrapper";
+/* 079 */     li.insertAdjacentElement("afterend", wrap);
+/* 080 */     wrap.appendChild(chartSection);
+/* 081 */   }
+/* 082 */ 
+/* 083 */   function createStockItem(code, label) {
+/* 084 */     const li = document.createElement("li");
+/* 085 */     const name = STOCK_NAMES[code] || "";
+/* 086 */ 
+/* 087 */     li.innerHTML = `
+/* 088 */       <span class="stock-code">${code}</span>
+/* 089 */       <span class="stock-name">${name}</span>
+/* 090 */     `;
+/* 091 */ 
+/* 092 */     li.addEventListener("click", async () => {
+/* 093 */       moveChartUnderItem(li);
+/* 094 */ 
+/* 095 */       const allStocks = await getAllStocks();
+/* 096 */       const stock = allStocks[code];
+/* 097 */ 
+/* 098 */       if (!stock || !stock.data || stock.data.length === 0) return;
+/* 099 */ 
+/* 100 */       const labels = stock.data.map(item => item.Date);
+/* 101 */       const closePrices = stock.data.map(item => item.C);
+/* 102 */ 
+/* 103 */       drawChart(code, label, labels, closePrices);
+/* 104 */     });
+/* 105 */ 
+/* 106 */     return li;
+/* 107 */   }
+/* 108 */ 
+/* 109 */   function showStockList(codes, label) {
+/* 110 */     resultList.innerHTML = "";
+/* 111 */ 
+/* 112 */     for (const code of codes) {
+/* 113 */       resultList.appendChild(createStockItem(code, label));
+/* 114 */     }
+/* 115 */   }
+/* 116 */ 
+/* 117 */   async function showFilteredStocks(label, judgeFunction) {
+/* 118 */     resultList.innerHTML = "";
+/* 119 */ 
+/* 120 */     const allStocks = await getAllStocks();
+/* 121 */ 
+/* 122 */     for (const code of WATCH_CODES) {
+/* 123 */       const stock = allStocks[code];
+/* 124 */       if (!stock || !stock.data || stock.data.length < 3) continue;
+/* 125 */ 
+/* 126 */       if (judgeFunction(stock.data)) {
+/* 127 */         resultList.appendChild(createStockItem(code, label));
+/* 128 */       }
+/* 129 */     }
+/* 130 */ 
+/* 131 */     if (resultList.children.length === 0) {
+/* 132 */       resultList.innerHTML = "<li>該当なし</li>";
+/* 133 */       clearChart(`${label} : 該当なし`);
+/* 134 */     } else {
+/* 135 */       chartTitle.textContent = label;
+/* 136 */     }
+/* 137 */   }
+/* 138 */ 
+/* 139 */   risingButton.addEventListener("click", async () => {
+/* 140 */     hideHighSubFilters();
+/* 141 */     setActiveButton(risingButton);
+/* 142 */     clearChart("赤三兵");
+/* 143 */     await showFilteredStocks("赤三兵", isRedThreeSoldiers);
+/* 144 */   });
+/* 145 */ 
+/* 146 */   fallingButton.addEventListener("click", async () => {
+/* 147 */     hideHighSubFilters();
+/* 148 */     setActiveButton(fallingButton);
+/* 149 */     clearChart("三羽烏");
+/* 150 */     await showFilteredStocks("三羽烏", isThreeBlackCrows);
+/* 151 */   });
+/* 152 */ 
+/* 153 */   bullishButton.addEventListener("click", () => {
+/* 154 */     hideHighSubFilters();
+/* 155 */     setActiveButton(bullishButton);
+/* 156 */     clearChart("出来高急増");
+/* 157 */     showStockList(WATCH_CODES, "出来高急増");
+/* 158 */   });
+/* 159 */ 
+/* 160 */   volumeButton.addEventListener("click", () => {
+/* 161 */     setActiveButton(volumeButton);
+/* 162 */     clearChart("高値更新");
+/* 163 */     document.getElementById("highSubFilters").classList.add("show");
+/* 164 */   });
+/* 165 */ 
+/* 166 */   high25Button.addEventListener("click", async () => {
+/* 167 */     clearChart("高値更新 25日");
+/* 168 */     await showFilteredStocks("高値更新 25日", isBreakHigh25);
+/* 169 */   });
+/* 170 */ 
+/* 171 */   function drawChart(code, label, labels, closePrices) {
+/* 172 */     if (chart) chart.destroy();
+/* 173 */ 
+/* 174 */     chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+/* 175 */ 
+/* 176 */     chart = new Chart(chartCanvas, {
+/* 177 */       type: "line",
+/* 178 */       data: {
+/* 179 */         labels: labels,
+/* 180 */         datasets: [{
+/* 181 */           label: code,
+/* 182 */           data: closePrices,
+/* 183 */           borderWidth: 2,
+/* 184 */           tension: 0.2
+/* 185 */         }]
+/* 186 */       },
+/* 187 */       options: {
+/* 188 */         responsive: true,
+/* 189 */         maintainAspectRatio: true
+/* 190 */       }
+/* 191 */     });
+/* 192 */   }
+/* 193 */ });
