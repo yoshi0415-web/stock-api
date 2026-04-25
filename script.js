@@ -50,6 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (name.length > 12) {
       name = name.slice(0, 12) + "…";
     }
+    
+    li.addEventListener("click", () => {
+  logCandidate(code);
+
+  if (isLoading) {
+    logCondition("候補クリック無効: 読込中");
+    return;
+  }
+
+  loadChart(code, label);
+});
 
     const line1 = name.slice(0, 6);
     const line2 = name.slice(6);
