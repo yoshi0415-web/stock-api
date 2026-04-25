@@ -15,7 +15,6 @@
 /* 014 */   const resultList = document.getElementById("resultList");
 /* 015 */   const chartCanvas = document.getElementById("chart");
 /* 016 */   const chartTitle = document.getElementById("chartTitle");
-/* 017 */   const chartTitle = document.getElementById("chartTitle");
 /* 017-1 */ const chartSection = document.querySelector(".chart-section");
 /* 018 */   const WATCH_CODES = [
 /* 019 */     "7203","6758","7974","9984","9432",
@@ -113,19 +112,26 @@ li.innerHTML = `
 /* 073 */ 
 /* 073-1 */     moveChartUnderItem(li);
 /* 073-2 */ 
-/* 073-3 */     const allStocks = await getAllStocks();
-/* 073-4 */     const stock = allStocks[code];
-/* 073-5 */ 
-/* 073-6 */     if (!stock || !stock.data || stock.data.length === 0) {
-/* 073-7 */       logNoData(stock);
-/* 073-8 */       return;
-/* 073-9 */     }
-/* 073-10 */ 
-/* 073-11 */     const prices = stock.data;
-/* 073-12 */     const labels = prices.map(item => item.Date);
-/* 073-13 */     const closePrices = prices.map(item => item.C);
-/* 073-14 */ 
-/* 073-15 */     drawChart(code, label, labels, closePrices);
+/* 073-3 */     try {
+/* 073-4 */       const allStocks = await getAllStocks();
+/* 073-5 */       const stock = allStocks[code];
+/* 073-6 */ 
+/* 073-7 */       if (!stock || !Array.isArray(stock.data) || stock.data.length === 0) {
+/* 073-8 */         logNoData(stock);
+/* 073-9 */         showDebugLogs();
+/* 073-10 */         return;
+/* 073-11 */       }
+/* 073-12 */ 
+/* 073-13 */       const prices = stock.data;
+/* 073-14 */       const labels = prices.map(item => item.Date);
+/* 073-15 */       const closePrices = prices.map(item => item.C);
+/* 073-16 */ 
+/* 073-17 */       drawChart(code, label, labels, closePrices);
+/* 073-18 */ 
+/* 073-19 */     } catch (error) {
+/* 073-20 */       logError(error);
+/* 073-21 */       showDebugLogs();
+/* 073-22 */     }
 /* 075 */     });
 /* 075-1 */       try {
 /* 075-2 */         const allStocks = await getAllStocks();
