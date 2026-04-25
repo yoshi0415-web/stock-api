@@ -143,6 +143,7 @@ li.innerHTML = `
 /* 140 */     if (isLoading) return;
 /* 141 */ 
 /* 142 */     logCondition("赤三兵");
+/* 142-1 */     hideHighSubFilters();
 /* 143 */     setActiveButton(risingButton);
 /* 144 */     clearChart("赤三兵");
 /* 145 */ 
