@@ -218,8 +218,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-        alert("データがありません");
-        return;
+  alert(JSON.stringify(data));
+  return;
       }
 
       const prices = data.data;
