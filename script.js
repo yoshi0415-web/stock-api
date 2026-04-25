@@ -112,7 +112,20 @@ li.innerHTML = `
 /* 072 */       }
 /* 073 */ 
 /* 073-1 */     moveChartUnderItem(li);
-/* 074 */       loadChart(code, label);
+/* 073-2 */ 
+/* 073-3 */     const allStocks = await getAllStocks();
+/* 073-4 */     const stock = allStocks[code];
+/* 073-5 */ 
+/* 073-6 */     if (!stock || !stock.data || stock.data.length === 0) {
+/* 073-7 */       logNoData(stock);
+/* 073-8 */       return;
+/* 073-9 */     }
+/* 073-10 */ 
+/* 073-11 */     const prices = stock.data;
+/* 073-12 */     const labels = prices.map(item => item.Date);
+/* 073-13 */     const closePrices = prices.map(item => item.C);
+/* 073-14 */ 
+/* 073-15 */     drawChart(code, label, labels, closePrices);
 /* 075 */     });
 /* 075-1 */       try {
 /* 075-2 */         const allStocks = await getAllStocks();
