@@ -1,75 +1,65 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>株ツリー</title>
-
-  <link rel="apple-touch-icon" href="icon1.0.PNG">
-  <link rel="icon" href="icon1.0.PNG">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
-
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-
-<body>
-  <main class="app">
-
-    <header class="app-header">
-      <h1 class="app-title">🌳 株ツリー</h1>
-    </header>
-
-    <section class="filters">
-      <button id="risingButton" class="show-button" type="button">赤三兵</button>
-      <button id="fallingButton" class="show-button" type="button">三羽烏</button>
-      <button id="bullishButton" class="show-button" type="button">出来高急増</button>
-      <button id="volumeButton" class="show-button" type="button">高値更新</button>
-    </section>
-
-<section id="highSubFilters" class="sub-filters">
-  <button id="highYtdButton" class="sub-button" type="button">年初来</button>
-  <button id="high75Button" class="sub-button" type="button">75日</button>
-  <button id="high50Button" class="sub-button" type="button">50日</button>
-  <button id="high25Button" class="sub-button" type="button">25日</button>
-</section>
-
-    <section class="result-section">
-      <h2>候補銘柄</h2>
-      <ul id="resultList"></ul>
-    </section>
-
-    <section class="chart-section">
-      <h2 id="chartTitle">チャート</h2>
-      <canvas id="chart" width="400" height="300"></canvas>
-    </section>
-
-<section class="log-section">
-  <h2>ログ</h2>
-  <pre id="logArea"></pre>
-</section>
-
-  </main>
-
-  <div class="version-text">
-    Ver 2026.04.25-24
-  </div>
-
-  <div id="loadingBlocker" class="loading-blocker"></div>
-
-  <script src="debug.js"></script>
-<script src="conditions.js"></script>
-<script src="script.js"></script>
-
-<script>
-  const logArea = document.getElementById("logArea");
-
-  if (logArea) {
-    logArea.textContent = "ログ表示テストOK";
-  } else {
-    alert("logArea が見つかりません");
-  }
-</script>
-</body>
-</html>
+<!-- 001 --> <!DOCTYPE html>
+<!-- 002 --> <html lang="ja">
+<!-- 003 --> <head>
+<!-- 004 -->   <meta charset="UTF-8">
+<!-- 005 -->   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 006 -->   <title>株ツリー</title>
+<!-- 007 --> 
+<!-- 008 -->   <link rel="apple-touch-icon" href="icon1.0.PNG">
+<!-- 009 -->   <link rel="icon" href="icon1.0.PNG">
+<!-- 010 -->   <link rel="manifest" href="manifest.json">
+<!-- 011 -->   <meta name="theme-color" content="#000000">
+<!-- 012 --> 
+<!-- 013 -->   <link rel="stylesheet" href="style.css">
+<!-- 014 -->   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- 015 --> </head>
+<!-- 016 --> 
+<!-- 017 --> <body>
+<!-- 018 -->   <main class="app">
+<!-- 019 --> 
+<!-- 020 -->     <header class="app-header">
+<!-- 021 -->       <h1 class="app-title">🌳 株ツリー</h1>
+<!-- 022 -->     </header>
+<!-- 023 --> 
+<!-- 024 -->     <section class="filters">
+<!-- 025 -->       <button id="risingButton" class="show-button" type="button">赤三兵</button>
+<!-- 026 -->       <button id="fallingButton" class="show-button" type="button">三羽烏</button>
+<!-- 027 -->       <button id="bullishButton" class="show-button" type="button">出来高急増</button>
+<!-- 028 -->       <button id="volumeButton" class="show-button" type="button">高値更新</button>
+<!-- 029 -->     </section>
+<!-- 030 --> 
+<!-- 031 -->     <section id="highSubFilters" class="sub-filters">
+<!-- 032 -->       <button id="highYtdButton" class="sub-button" type="button">年初来</button>
+<!-- 033 -->       <button id="high75Button" class="sub-button" type="button">75日</button>
+<!-- 034 -->       <button id="high50Button" class="sub-button" type="button">50日</button>
+<!-- 035 -->       <button id="high25Button" class="sub-button" type="button">25日</button>
+<!-- 036 -->     </section>
+<!-- 037 --> 
+<!-- 038 -->     <section class="result-section">
+<!-- 039 -->       <h2>候補銘柄</h2>
+<!-- 040 -->       <ul id="resultList"></ul>
+<!-- 041 -->     </section>
+<!-- 042 --> 
+<!-- 043 -->     <section class="chart-section">
+<!-- 044 -->       <h2 id="chartTitle">チャート</h2>
+<!-- 045 -->       <canvas id="chart" width="400" height="300"></canvas>
+<!-- 046 -->     </section>
+<!-- 047 --> 
+<!-- 048 -->     <section class="log-section">
+<!-- 049 -->       <h2>ログ</h2>
+<!-- 050 -->       <pre id="logArea"></pre>
+<!-- 051 -->     </section>
+<!-- 052 --> 
+<!-- 053 -->   </main>
+<!-- 054 --> 
+<!-- 055 -->   <div class="version-text">
+<!-- 056 -->     Ver 2026.04.25-24
+<!-- 057 -->   </div>
+<!-- 058 --> 
+<!-- 059 -->   <div id="loadingBlocker" class="loading-blocker"></div>
+<!-- 060 --> 
+<!-- 061 -->   <script src="debug.js"></script>
+<!-- 062 -->   <script src="conditions.js"></script>
+<!-- 063 -->   <script src="script.js"></script>
+<!-- 064 --> </body>
+<!-- 065 --> </html>
