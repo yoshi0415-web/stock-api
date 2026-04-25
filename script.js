@@ -33,6 +33,92 @@ document.addEventListener("DOMContentLoaded", () => {
     activeButton.classList.add("active");
   }
 
+  function createStockItem(code, label) {
+    const li = document.createElement("li");
+
+    let name = STOCK_NAMES[code] || "";
+
+    if (name.length > 12) {
+      name = name.slice(0, 12) + "…";
+    }
+
+    const line1 = name.slice(0, 6);
+    const line2 = name.slice(6);
+
+    li.innerHTML = `
+      <span class="stock-code">${code}</span>
+      <span class="stock-name-wrap">
+        <span class="stock-name">${line1}</span>
+        <span class="stock-name">${line2}</span>
+      </span>
+    `;
+
+    li.addEventListener("click", () => {
+      if (isLoading) return;
+      loadChart(code, label);
+    });
+
+    return li;
+  }
+
+  function showStockList(codes, label) {
+    resultList.innerHTML = "";
+
+    for (const code of codes) {
+      resultList.appendChild(createStockItem(code, label));
+    }
+  }
+
+  async function showFilteredStocks(label, judgeFunction) {
+    resultList.innerHTML = "";
+
+    for (const code of WATCH_CODES) {
+      try {
+        const response = await fetch(
+          `https://kabutree.vercel.app/api/stock?code=${code}`
+        );
+
+        const data = await response.json();
+
+        if (!data.data || data.data.length < 3) {
+          continue;
+        }
+
+        if (judgeFunction(data.data)) {
+          resultList.appendChild(createStockItem(code, label));
+        }
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (resultList.children.length === 0) {
+      resultList.innerHTML = "<li>該当なし</li>";
+    }
+  }
+
+  function isRedThreeSoldiers(prices) {
+    const last3 = prices.slice(-3);
+
+    if (last3.length < 3) {
+      return false;
+    }
+
+    const [day1, day2, day3] = last3;
+
+    const allBullish =
+      day1.C > day1.O &&
+      day2.C > day2.O &&
+      day3.C > day3.O;
+
+    const closeRising =
+      day1.C < day2.C &&
+      day2.C < day3.C;
+
+    return allBullish && closeRising;
+  }
+
   function setLoadingState(loading) {
     isLoading = loading;
 
@@ -47,11 +133,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   risingButton.addEventListener("click", async () => {
-  if (isLoading) return;
+    if (isLoading) return;
 
-  setActiveButton(risingButton);
-  await showFilteredStocks("赤三兵", isRedThreeSoldiers);
-});
+    setActiveButton(risingButton);
+    await showFilteredStocks("赤三兵", isRedThreeSoldiers);
+  });
 
   fallingButton.addEventListener("click", () => {
     if (isLoading) return;
@@ -73,80 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setActiveButton(volumeButton);
     showStockList(WATCH_CODES, "高値更新");
   });
-
-  async function showFilteredStocks(label, judgeFunction) {
-  resultList.innerHTML = "";
-
-  for (const code of WATCH_CODES) {
-    try {
-      const response = await fetch(
-        `https://kabutree.vercel.app/api/stock?code=${code}`
-      );
-
-      const data = await response.json();
-
-      if (!data.data || data.data.length < 3) {
-        continue;
-      }
-
-      if (judgeFunction(data.data)) {
-        const li = document.createElement("li");
-
-        let name = STOCK_NAMES[code] || "";
-
-        if (name.length > 12) {
-          name = name.slice(0, 12) + "…";
-        }
-
-        const line1 = name.slice(0, 6);
-        const line2 = name.slice(6);
-
-        li.innerHTML = `
-          <span class="stock-code">${code}</span>
-          <span class="stock-name-wrap">
-            <span class="stock-name">${line1}</span>
-            <span class="stock-name">${line2}</span>
-          </span>
-        `;
-
-        li.addEventListener("click", () => {
-          if (isLoading) return;
-          loadChart(code, label);
-        });
-
-        resultList.appendChild(li);
-      }
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  
-  function isRedThreeSoldiers(prices) {
-  const last3 = prices.slice(-3);
-
-  if (last3.length < 3) {
-    return false;
-  }
-
-  const [day1, day2, day3] = last3;
-
-  const allBullish =
-    day1.C > day1.O &&
-    day2.C > day2.O &&
-    day3.C > day3.O;
-
-  const closeRising =
-    day1.C < day2.C &&
-    day2.C < day3.C;
-
-  return allBullish && closeRising;
-}
-
-  if (resultList.children.length === 0) {
-    resultList.innerHTML = "<li>該当なし</li>";
-  }
-}
 
   function drawChart(code, label, labels, closePrices) {
     if (chart) {
