@@ -45,7 +45,7 @@
 /* 026-18 */     }
 /* 026-19 */ 
 /* 026-20 */     const response = await fetch("/api/stocks");
-/* 026-21 */     const data = await response.json();
+/* 026-20 */ const response = await fetch("/stocks.json");
 /* 026-22 */ 
 /* 026-23 */     allStocksCache = data;
 /* 026-24 */     return data;
