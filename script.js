@@ -108,27 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function isRedThreeSoldiers(prices) {
-    const last3 = prices.slice(-3);
-
-    if (last3.length < 3) {
-      return false;
-    }
-
-    const [day1, day2, day3] = last3;
-
-    const allBullish =
-      day1.C > day1.O &&
-      day2.C > day2.O &&
-      day3.C > day3.O;
-
-    const closeRising =
-      day1.C < day2.C &&
-      day2.C < day3.C;
-
-    return allBullish && closeRising;
-  }
-
   function setLoadingState(loading) {
     isLoading = loading;
 
@@ -151,12 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   fallingButton.addEventListener("click", async () => {
-  if (isLoading) return;
+    if (isLoading) return;
 
-  setActiveButton(fallingButton);
-  clearChart("三羽烏");
-  await showFilteredStocks("三羽烏", isThreeBlackCrows);
-});
+    setActiveButton(fallingButton);
+    clearChart("三羽烏");
+    await showFilteredStocks("三羽烏", isThreeBlackCrows);
+  });
 
   bullishButton.addEventListener("click", () => {
     if (isLoading) return;
@@ -209,10 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const now = Date.now();
 
     if (isLoading) return;
-
-    if (now - lastRequestAt < MIN_COOLDOWN_MS) {
-      return;
-    }
+    if (now - lastRequestAt < MIN_COOLDOWN_MS) return;
 
     lastRequestAt = now;
 
@@ -227,12 +203,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
 
-      if (requestId !== currentRequestId) {
-        return;
-      }
+      if (requestId !== currentRequestId) return;
 
       if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-        alert("データがありません");
+        alert(JSON.stringify(data));
         return;
       }
 
@@ -243,9 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
       drawChart(code, label, labels, closePrices);
 
     } catch (error) {
-      if (requestId !== currentRequestId) {
-        return;
-      }
+      if (requestId !== currentRequestId) return;
 
       alert("通信エラー");
 
