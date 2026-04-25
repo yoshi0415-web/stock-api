@@ -150,13 +150,13 @@ document.addEventListener("DOMContentLoaded", () => {
     await showFilteredStocks("赤三兵", isRedThreeSoldiers);
   });
 
-  fallingButton.addEventListener("click", () => {
-    if (isLoading) return;
+  fallingButton.addEventListener("click", async () => {
+  if (isLoading) return;
 
-    setActiveButton(fallingButton);
-    clearChart("三羽烏");
-    showStockList(WATCH_CODES, "三羽烏");
-  });
+  setActiveButton(fallingButton);
+  clearChart("三羽烏");
+  await showFilteredStocks("三羽烏", isThreeBlackCrows);
+});
 
   bullishButton.addEventListener("click", () => {
     if (isLoading) return;
