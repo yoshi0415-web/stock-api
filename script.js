@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (chart) {
       chart.destroy();
       chart = null;
+      logDestroy();
     }
 
     chartTitle.textContent = titleText;
@@ -50,17 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (name.length > 12) {
       name = name.slice(0, 12) + "…";
     }
-    
-    li.addEventListener("click", () => {
-  logCandidate(code);
-
-  if (isLoading) {
-    logCondition("候補クリック無効: 読込中");
-    return;
-  }
-
-  loadChart(code, label);
-});
 
     const line1 = name.slice(0, 6);
     const line2 = name.slice(6);
@@ -74,7 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     li.addEventListener("click", () => {
-      if (isLoading) return;
+      logCandidate(code);
+
+      if (isLoading) {
+        logCondition("候補クリック無効: 読込中");
+        return;
+      }
+
       loadChart(code, label);
     });
 
@@ -83,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showStockList(codes, label) {
     resultList.innerHTML = "";
+    logList(label);
 
     for (const code of codes) {
       resultList.appendChild(createStockItem(code, label));
@@ -90,73 +87,99 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function showFilteredStocks(label, judgeFunction) {
-  resultList.innerHTML = "";
-  chartTitle.textContent = "読み込み中...";
+    resultList.innerHTML = "";
+    chartTitle.textContent = "読み込み中...";
+    logList(label);
 
-  for (const code of WATCH_CODES) {
-    try {
-      const response = await fetch(
-        `https://kabutree.vercel.app/api/stock?code=${code}`
-      );
+    for (const code of WATCH_CODES) {
+      try {
+        const response = await fetch(
+          `https://kabutree.vercel.app/api/stock?code=${code}`
+        );
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!data.data || data.data.length < 3) {
-        continue;
+        if (!data.data || data.data.length < 3) {
+          continue;
+        }
+
+        if (judgeFunction(data.data)) {
+          resultList.appendChild(createStockItem(code, label));
+        }
+
+      } catch (error) {
+        logError(error);
       }
+    }
 
-      if (judgeFunction(data.data)) {
-        resultList.appendChild(createStockItem(code, label));
-      }
-
-    } catch (error) {
-      console.log(error);
+    if (resultList.children.length === 0) {
+      resultList.innerHTML = "<li>該当なし</li>";
+      clearChart(`${label} : 該当なし`);
+    } else {
+      chartTitle.textContent = label;
     }
   }
 
-  if (resultList.children.length === 0) {
-    resultList.innerHTML = "<li>該当なし</li>";
-    clearChart(`${label} : 該当なし`);
-  } else {
-    chartTitle.textContent = label;
+  function setLoadingState(loading) {
+    isLoading = loading;
+
+    if (loading) {
+      document.body.classList.add("is-loading");
+      resultList.classList.add("is-loading");
+      chartTitle.textContent = "読み込み中...";
+      logLoadingStart();
+
+    } else {
+      document.body.classList.remove("is-loading");
+      resultList.classList.remove("is-loading");
+      logLoadingEnd();
+    }
   }
-}
 
   risingButton.addEventListener("click", async () => {
     if (isLoading) return;
 
+    logCondition("赤三兵");
     setActiveButton(risingButton);
     clearChart("赤三兵");
+
     await showFilteredStocks("赤三兵", isRedThreeSoldiers);
   });
 
   fallingButton.addEventListener("click", async () => {
     if (isLoading) return;
 
+    logCondition("三羽烏");
     setActiveButton(fallingButton);
     clearChart("三羽烏");
+
     await showFilteredStocks("三羽烏", isThreeBlackCrows);
   });
 
   bullishButton.addEventListener("click", () => {
     if (isLoading) return;
 
+    logCondition("出来高急増");
     setActiveButton(bullishButton);
     clearChart("出来高急増");
+
     showStockList(WATCH_CODES, "出来高急増");
   });
 
   volumeButton.addEventListener("click", () => {
     if (isLoading) return;
 
+    logCondition("高値更新");
     setActiveButton(volumeButton);
     clearChart("高値更新");
+
     showStockList(WATCH_CODES, "高値更新");
   });
 
   function drawChart(code, label, labels, closePrices) {
     if (chart) {
       chart.destroy();
+      logDestroy();
     }
 
     chartTitle.textContent =
@@ -183,30 +206,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
+
+    logChart(code);
   }
 
   async function loadChart(code, label) {
-  logStart(code);
+    const now = Date.now();
 
-  const now = Date.now();
+    if (isLoading) {
+      logCondition("通信拒否: 読込中");
+      return;
+    }
 
-  if (isLoading) {
-    logCondition("通信拒否: 読込中");
-    return;
-  }
-
-  if (now - lastRequestAt < MIN_COOLDOWN_MS) {
-    logCooldown(code);
-    return;
-  }
-
-    if (isLoading) return;
-    if (now - lastRequestAt < MIN_COOLDOWN_MS) return;
+    if (now - lastRequestAt < MIN_COOLDOWN_MS) {
+      logCooldown(code);
+      return;
+    }
 
     lastRequestAt = now;
 
     const requestId = ++currentRequestId;
 
+    logStart(code);
     setLoadingState(true);
 
     try {
@@ -214,14 +235,22 @@ document.addEventListener("DOMContentLoaded", () => {
         `https://kabutree.vercel.app/api/stock?code=${code}`
       );
 
+      logHttp(response.status);
+
       const data = await response.json();
 
-      if (requestId !== currentRequestId) return;
-
-      if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-        alert(JSON.stringify(data));
+      if (requestId !== currentRequestId) {
+        logIgnore(code);
         return;
       }
+
+      if (!data || !Array.isArray(data.data) || data.data.length === 0) {
+        logNoData(data);
+        showDebugLogs();
+        return;
+      }
+
+      logSuccess(data.data.length);
 
       const prices = data.data;
       const labels = prices.map(item => item.Date);
@@ -229,19 +258,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       drawChart(code, label, labels, closePrices);
 
-        } catch (error) {
+    } catch (error) {
       if (requestId !== currentRequestId) return;
 
-      alert("通信エラー: " + error.message);
+      logError(error);
+      showDebugLogs();
 
     } finally {
       if (requestId === currentRequestId) {
         setLoadingState(false);
-        } else {
-  document.body.classList.remove("is-loading");
-  resultList.classList.remove("is-loading");
-}
+      }
     }
   }
+
+  logCondition("script.js 読み込み完了");
 });
-logCondition("script.js 読み込み完了");
