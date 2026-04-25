@@ -2,11 +2,18 @@ window.debugLogs = [];
 
 function pushLog(message) {
   const time = new Date().toLocaleTimeString("ja-JP");
+  const line = `${time} ${message}`;
 
-  window.debugLogs.push(`${time} ${message}`);
+  window.debugLogs.push(line);
 
-  if (window.debugLogs.length > 30) {
+  if (window.debugLogs.length > 50) {
     window.debugLogs.shift();
+  }
+
+  const logArea = document.getElementById("logArea");
+  if (logArea) {
+    logArea.textContent = window.debugLogs.join("\n");
+    logArea.scrollTop = logArea.scrollHeight;
   }
 }
 
