@@ -186,7 +186,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadChart(code, label) {
-    const now = Date.now();
+  logStart(code);
+
+  const now = Date.now();
+
+  if (isLoading) {
+    logCondition("通信拒否: 読込中");
+    return;
+  }
+
+  if (now - lastRequestAt < MIN_COOLDOWN_MS) {
+    logCooldown(code);
+    return;
+  }
 
     if (isLoading) return;
     if (now - lastRequestAt < MIN_COOLDOWN_MS) return;
