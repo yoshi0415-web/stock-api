@@ -154,6 +154,7 @@ li.innerHTML = `
 /* 150 */     if (isLoading) return;
 /* 151 */ 
 /* 152 */     logCondition("三羽烏");
+/* 152-1 */     hideHighSubFilters();
 /* 153 */     setActiveButton(fallingButton);
 /* 154 */     clearChart("三羽烏");
 /* 155 */ 
@@ -164,6 +165,7 @@ li.innerHTML = `
 /* 160 */     if (isLoading) return;
 /* 161 */ 
 /* 162 */     logCondition("出来高急増");
+/* 162-1 */     hideHighSubFilters();
 /* 163 */     setActiveButton(bullishButton);
 /* 164 */     clearChart("出来高急増");
 /* 165 */ 
