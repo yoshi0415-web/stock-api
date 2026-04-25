@@ -130,9 +130,12 @@ li.innerHTML = `
 /* 101 */           continue;
 /* 102 */         }
 /* 103 */ 
-/* 104 */         if (judgeFunction(stock.data)) {
-/* 105 */           resultList.appendChild(createStockItem(code, label));
-/* 106 */         }
+/* 104 */         const result = judgeFunction(stock.data);
+/* 104-1 */       logCondition(`${code} 判定: ${result}`);
+/* 104-2 */ 
+/* 105 */         if (result) {
+/* 106 */           resultList.appendChild(createStockItem(code, label));
+/* 106-1 */       }
 /* 107 */       }
 /* 108 */ 
 /* 109 */       if (resultList.children.length === 0) {
