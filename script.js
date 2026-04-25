@@ -84,10 +84,10 @@
 /* 084 */     const li = document.createElement("li");
 /* 085 */     const name = STOCK_NAMES[code] || "";
 /* 086 */ 
-/* 087 */     li.innerHTML = `
-/* 088 */       <span class="stock-code">${code}</span>
-/* 089 */       <span class="stock-name">${name}</span>
-/* 090 */     `;
+li.innerHTML = `
+<span class="stock-code">${code}</span>
+<span class="stock-name">${name}</span>
+`;
 /* 091 */ 
 /* 092 */     li.addEventListener("click", async () => {
 /* 093 */       moveChartUnderItem(li);
