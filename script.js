@@ -33,6 +33,9 @@
 /* 033 */     activeButton.classList.add("active");
 /* 034 */   }
 /* 035 */ 
+/* 035-1 */   function hideHighSubFilters() {
+/* 035-2 */     document.getElementById("highSubFilters").classList.remove("show");
+/* 035-3 */   }
 /* 036 */   function clearChart(titleText = "チャート") {
 /* 037 */     if (chart) {
 /* 038 */       chart.destroy();
