@@ -36,4 +36,6 @@ window.logLoadingEnd = () => pushLog("読込終了");
 window.showDebugLogs = function () {
   alert(window.debugLogs.join("\n"));
 };
-pushLog("debug.js 読み込み完了");
+window.addEventListener("DOMContentLoaded", () => {
+  pushLog("debug.js 読み込み完了");
+});
