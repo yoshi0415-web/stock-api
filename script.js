@@ -237,7 +237,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } finally {
       if (requestId === currentRequestId) {
         setLoadingState(false);
-      }
+        } else {
+  document.body.classList.remove("is-loading");
+  resultList.classList.remove("is-loading");
+}
     }
   }
 });
