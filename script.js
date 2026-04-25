@@ -10,6 +10,7 @@
 /* 010 */   const fallingButton = document.getElementById("fallingButton");
 /* 011 */   const bullishButton = document.getElementById("bullishButton");
 /* 012 */   const volumeButton = document.getElementById("volumeButton");
+/* 012-1 */   const high25Button = document.getElementById("high25Button");
 /* 013 */ 
 /* 014 */   const resultList = document.getElementById("resultList");
 /* 015 */   const chartCanvas = document.getElementById("chart");
@@ -181,6 +182,12 @@ li.innerHTML = `
 /* 175 */ 
 /* 176 */     document.getElementById("highSubFilters").classList.add("show");
 /* 177 */   });
+/* 177-1 */   high25Button.addEventListener("click", async () => {
+/* 177-2 */     if (isLoading) return;
+/* 177-3 */ 
+/* 177-4 */     clearChart("高値更新 25日");
+/* 177-5 */     await showFilteredStocks("高値更新 25日", isBreakHigh25);
+/* 177-6 */   });
 /* 178 */ 
 /* 179 */   function drawChart(code, label, labels, closePrices) {
 /* 180 */     if (chart) {
