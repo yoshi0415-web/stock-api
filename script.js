@@ -74,35 +74,56 @@ document.addEventListener("DOMContentLoaded", () => {
     showStockList(WATCH_CODES, "高値更新");
   });
 
-  function showStockList(codes, label) {
+  async function showFilteredStocks(label, judgeFunction) {
   resultList.innerHTML = "";
 
-  for (const code of codes) {
-    const li = document.createElement("li");
+  for (const code of WATCH_CODES) {
+    try {
+      const response = await fetch(
+        `https://kabutree.vercel.app/api/stock?code=${code}`
+      );
 
-    let name = STOCK_NAMES[code] || "";
+      const data = await response.json();
 
-    if (name.length > 12) {
-      name = name.slice(0, 12) + "…";
+      if (!data.data || data.data.length < 3) {
+        continue;
+      }
+
+      if (judgeFunction(data.data)) {
+        const li = document.createElement("li");
+
+        let name = STOCK_NAMES[code] || "";
+
+        if (name.length > 12) {
+          name = name.slice(0, 12) + "…";
+        }
+
+        const line1 = name.slice(0, 6);
+        const line2 = name.slice(6);
+
+        li.innerHTML = `
+          <span class="stock-code">${code}</span>
+          <span class="stock-name-wrap">
+            <span class="stock-name">${line1}</span>
+            <span class="stock-name">${line2}</span>
+          </span>
+        `;
+
+        li.addEventListener("click", () => {
+          if (isLoading) return;
+          loadChart(code, label);
+        });
+
+        resultList.appendChild(li);
+      }
+
+    } catch (error) {
+      console.log(error);
     }
+  }
 
-    const line1 = name.slice(0, 6);
-    const line2 = name.slice(6);
-
-    li.innerHTML = `
-      <span class="stock-code">${code}</span>
-      <span class="stock-name-wrap">
-        <span class="stock-name">${line1}</span>
-        <span class="stock-name">${line2}</span>
-      </span>
-    `;
-
-    li.addEventListener("click", () => {
-      if (isLoading) return;
-      loadChart(code, label);
-    });
-
-    resultList.appendChild(li);
+  if (resultList.children.length === 0) {
+    resultList.innerHTML = "<li>該当なし</li>";
   }
 }
 
