@@ -55,13 +55,13 @@
 /* 055 */     const line1 = name.slice(0, 6);
 /* 056 */     const line2 = name.slice(6);
 /* 057 */ 
-/* 058 */     li.innerHTML = `
-/* 059 */       <span class="stock-code">${code}</span>
-/* 060 */       <span class="stock-name-wrap">
-/* 061 */         <span class="stock-name">${line1}</span>
-/* 062 */         <span class="stock-name">${line2}</span>
-/* 063 */       </span>
-/* 064 */     `;
+li.innerHTML = `
+  <span class="stock-code">${code}</span>
+  <span class="stock-name-wrap">
+    <span class="stock-name">${line1}</span>
+    <span class="stock-name">${line2}</span>
+  </span>
+`;
 /* 065 */ 
 /* 066 */     li.addEventListener("click", () => {
 /* 067 */       logCandidate(code);
