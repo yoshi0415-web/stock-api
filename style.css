@@ -190,6 +190,22 @@ grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   font-weight: bold;
 }
 
+.notice-box {
+  margin: 12px auto 18px;
+  padding: 10px 12px;
+  max-width: 520px;
+  border-radius: 10px;
+  background: #fff7e6;
+  color: #6b4a00;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.notice-box p {
+  margin: 2px 0;
+}
+
 /* 左下バージョン */
 .version-text {
   position: fixed;
