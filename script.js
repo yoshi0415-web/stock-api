@@ -33,6 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
     activeButton.classList.add("active");
   }
 
+  function clearChart(titleText = "チャート") {
+    if (chart) {
+      chart.destroy();
+      chart = null;
+    }
+
+    chartTitle.textContent = titleText;
+  }
+
   function createStockItem(code, label) {
     const li = document.createElement("li");
 
@@ -87,19 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (judgeFunction(data.data)) {
           resultList.appendChild(createStockItem(code, label));
         }
-        
-        if (resultList.children.length === 0) {
-  resultList.innerHTML = "<li>該当なし</li>";
-
-  chartTitle.textContent = `${label} : 該当なし`;
-
-  if (chart) {
-    chart.destroy();
-    chart = null;
-  }
-
-  return;
-}
 
       } catch (error) {
         console.log(error);
@@ -108,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (resultList.children.length === 0) {
       resultList.innerHTML = "<li>該当なし</li>";
+      clearChart(`${label} : 該当なし`);
     }
   }
 
@@ -149,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isLoading) return;
 
     setActiveButton(risingButton);
+    clearChart("赤三兵");
     await showFilteredStocks("赤三兵", isRedThreeSoldiers);
   });
 
@@ -156,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isLoading) return;
 
     setActiveButton(fallingButton);
+    clearChart("三羽烏");
     showStockList(WATCH_CODES, "三羽烏");
   });
 
@@ -163,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isLoading) return;
 
     setActiveButton(bullishButton);
+    clearChart("出来高急増");
     showStockList(WATCH_CODES, "出来高急増");
   });
 
@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isLoading) return;
 
     setActiveButton(volumeButton);
+    clearChart("高値更新");
     showStockList(WATCH_CODES, "高値更新");
   });
 
@@ -231,8 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-  alert(JSON.stringify(data));
-  return;
+        alert("データがありません");
+        return;
       }
 
       const prices = data.data;
