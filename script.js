@@ -83,47 +83,31 @@ document.addEventListener("DOMContentLoaded", () => {
   chartTitle.textContent = "読み込み中...";
 
   for (const code of WATCH_CODES) {
-    for (const code of WATCH_CODES) {
-      try {
-        const response = await fetch(
-          `https://kabutree.vercel.app/api/stock?code=${code}`
-        );
+    try {
+      const response = await fetch(
+        `https://kabutree.vercel.app/api/stock?code=${code}`
+      );
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (!data.data || data.data.length < 3) {
-          continue;
-        }
-
-        if (judgeFunction(data.data)) {
-          resultList.appendChild(createStockItem(code, label));
-        }
-
-      } catch (error) {
-        console.log(error);
+      if (!data.data || data.data.length < 3) {
+        continue;
       }
-    }
 
-    if (resultList.children.length === 0) {
-      resultList.innerHTML = "<li>該当なし</li>";
-      clearChart(`${label} : 該当なし`);
+      if (judgeFunction(data.data)) {
+        resultList.appendChild(createStockItem(code, label));
+      }
+
+    } catch (error) {
+      console.log(error);
     }
   }
 
-  function setLoadingState(loading) {
-  isLoading = loading;
-
-  if (loading) {
-    document.body.classList.add("is-loading");
-    resultList.classList.add("is-loading");
-
-    chartTitle.textContent = "読み込み中...";
-
+  if (resultList.children.length === 0) {
+    resultList.innerHTML = "<li>該当なし</li>";
+    clearChart(`${label} : 該当なし`);
   } else {
-    document.body.classList.remove("is-loading");
-    resultList.classList.remove("is-loading");
-
-    lastRequestAt = Date.now();
+    chartTitle.textContent = label;
   }
 }
 
