@@ -206,11 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       drawChart(code, label, labels, closePrices);
 
-    } catch (error) {
-  if (requestId !== currentRequestId) return;
+        } catch (error) {
+      if (requestId !== currentRequestId) return;
 
-  alert("通信エラー: " + error.message);
-}
+      alert("通信エラー: " + error.message);
+
     } finally {
       if (requestId === currentRequestId) {
         setLoadingState(false);
