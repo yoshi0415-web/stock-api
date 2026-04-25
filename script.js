@@ -189,5 +189,7 @@ li.innerHTML = `
 /* 189 */         maintainAspectRatio: true
 /* 190 */       }
 /* 191 */     });
-/* 192 */   logCondition("script.js 読み込み完了");
-/* 193 */ });
+/* 192 */   }
+/* 193 */ 
+/* 194 */   logCondition("script.js 読み込み完了");
+/* 195 */ });
