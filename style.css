@@ -286,7 +286,7 @@
 /* 282 */     font-size: 17px;
 /* 283 */   }
 /* 284 */ }
-/* 285 */ @media (min-width: 900px) {
+/* 285 */ @media (min-width: 760px) {
 /* 286 */   .main-layout {
 /* 287 */     display: grid;
 /* 288 */     grid-template-columns: 0.85fr 1.35fr;
@@ -303,9 +303,9 @@
 /* 299 */     grid-row: 1;
 /* 300 */   }
 /* 301 */ 
-/* 302 */   #resultList {
-/* 303 */     grid-template-columns: repeat(2, 1fr);
-/* 304 */   }
+/* 302 */ #resultList {
+/* 303 */   grid-template-columns: repeat(3, 1fr);
+/* 304 */ }
 /* 305 */ 
 /* 306 */   .inline-chart-wrapper {
 /* 307 */     display: none;
