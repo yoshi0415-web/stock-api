@@ -8,21 +8,11 @@ body {
 }
 
 .app {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 20px 14px 80px;
-  text-align: center;
+  padding: 4px 14px 80px;
 }
 
-/* 注意書き */
 .notice-box {
-  margin: 6px auto 14px;
-  padding: 4px 8px;
-  max-width: 720px;
-  color: #666;
-  font-size: 10px;
-  line-height: 1.15;
-  text-align: left;
+  margin: 0 auto 8px;
 }
 
 .notice-box p {
