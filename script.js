@@ -15,6 +15,7 @@
 /* 015 */   const chartCanvas = document.getElementById("chart");
 /* 016 */   const chartTitle = document.getElementById("chartTitle");
 /* 017 */   const chartSection = document.querySelector(".chart-section");
+/* 017-1 */   const mainLayout = document.querySelector(".main-layout");
 /* 018 */ 
 /* 019 */   const WATCH_CODES = [
 /* 020 */     "7203","6758","7974","9984","9432",
@@ -80,19 +81,28 @@
 /* 080 */ 
 /* 081 */     li.classList.add("selected-stock");
 /* 081-1 */ 
-/* 081-2 */     const stockItems = Array.from(
-/* 081-3 */       document.querySelectorAll("#resultList li:not(.inline-chart-wrapper)")
-/* 081-4 */     );
+/* 081-2 */     const isWideScreen = window.matchMedia(
+/* 081-3 */       "(min-width: 760px) and (orientation: landscape), (min-width: 1024px)"
+/* 081-4 */     ).matches;
 /* 081-5 */ 
-/* 081-6 */     const index = stockItems.indexOf(li);
-/* 081-7 */     const rowEndIndex =
-/* 081-8 */       Math.min(Math.floor(index / 4) * 4 + 3, stockItems.length - 1);
-/* 081-9 */     const rowEndItem = stockItems[rowEndIndex];
+/* 081-6 */     if (isWideScreen) {
+/* 081-7 */       mainLayout.appendChild(chartSection);
+/* 081-8 */       return;
+/* 081-9 */     }
 /* 081-10 */ 
-/* 081-11 */     const wrap = document.createElement("li");
-/* 081-12 */     wrap.className = "inline-chart-wrapper";
-/* 081-13 */     rowEndItem.insertAdjacentElement("afterend", wrap);
-/* 081-14 */     wrap.appendChild(chartSection);
+/* 081-11 */     const stockItems = Array.from(
+/* 081-12 */       document.querySelectorAll("#resultList li:not(.inline-chart-wrapper)")
+/* 081-13 */     );
+/* 081-14 */ 
+/* 081-15 */     const index = stockItems.indexOf(li);
+/* 081-16 */     const rowEndIndex =
+/* 081-17 */       Math.min(Math.floor(index / 4) * 4 + 3, stockItems.length - 1);
+/* 081-18 */     const rowEndItem = stockItems[rowEndIndex];
+/* 081-19 */ 
+/* 081-20 */     const wrap = document.createElement("li");
+/* 081-21 */     wrap.className = "inline-chart-wrapper";
+/* 081-22 */     rowEndItem.insertAdjacentElement("afterend", wrap);
+/* 081-23 */     wrap.appendChild(chartSection);
 /* 082 */   }
 /* 083 */   function createStockItem(code, label) {
 /* 084 */     const li = document.createElement("li");
