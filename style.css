@@ -1,281 +1,284 @@
-/* 株ツリー */
-
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: linear-gradient(180deg, #f3f7f1 0%, #f7f8fa 260px);
-  color: #1f1f1f;
-}
-
-.app {
-  padding: 4px 14px 80px;
-}
-
-.notice-box {
-  margin: 0 auto 8px;
-}
-
-.notice-box p {
-  margin: 0;
-  line-height: 1.15;
-}
-
-/* タイトル */
-.app-header {
-  margin: 0 -14px 18px;
-  padding: 26px 14px 18px;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(35,120,60,0.18), transparent 28%),
-    radial-gradient(circle at 90% 10%, rgba(35,120,60,0.14), transparent 30%),
-    linear-gradient(180deg, #ffffff 0%, #eef7ed 100%);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-}
-
-.app-title {
-  margin: 8px 0 4px;
-  font-size: 42px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  color: #12351c;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.18);
-}
-
-.app-title::after {
-  content: "STOCK SCANNER";
-  display: block;
-  margin-top: 4px;
-  font-size: 11px;
-  letter-spacing: 5px;
-  color: #2f6b38;
-  font-weight: 700;
-}
-
-/* 条件ボタンエリア */
-.filters {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 22px 0 20px;
-}
-
-/* 条件ボタン */
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 18px 0;
-}
-
-.show-button {
-  width: auto;
-  min-width: 92px;
-  height: 42px;
-  padding: 0 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 999px;
-  background: #fff;
-  color: #222;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-}
-
-.show-button.active {
-  background: #0b8f3a;
-  color: #fff;
-}
-
-/* サブボタン */
-.sub-filters {
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: -6px 0 18px;
-}
-
-.sub-filters.show {
-  display: flex;
-}
-
-.sub-button {
-  padding: 7px 12px;
-  font-size: 12px;
-  border: none;
-  border-radius: 999px;
-  background: #e8eee8;
-  color: #234;
-  font-weight: 700;
-}
-
-.sub-button.active {
-  background: #0b8f3a;
-  color: #fff;
-}
-
-/* 候補銘柄 */
-.result-section {
-  margin-top: 12px;
-}
-
-.result-section h2 {
-  font-size: 24px;
-  margin: 14px 0 16px;
-  font-weight: 900;
-}
-
-#resultList {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-#resultList li {
-  background: #fff;
-  padding: 8px 4px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: center;
-  min-height: 64px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-#resultList li:active {
-  transform: scale(0.98);
-}
-
-.stock-code {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.stock-name {
-  font-size: 10px;
-}
-
-/* チャート */
-.chart-section {
-  margin-top: 18px;
-  background: #fff;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-}
-
-.chart-section h2 {
-  margin-top: 0;
-  font-size: 22px;
-  font-weight: 900;
-}
-
-canvas {
-  max-width: 100%;
-}
-
-/* 銘柄下に出るチャート */
-.inline-chart-wrapper {
-  list-style: none;
-  grid-column: 1 / -1;
-  width: 100%;
-  padding: 0;
-  margin: 12px 0;
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0;
-}
-
-.inline-chart-wrapper .chart-section {
-  width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-.inline-chart-wrapper canvas {
-  width: 100% !important;
-  max-width: 100%;
-  height: 300px !important;
-}
-
-/* ログ */
-.log-section {
-  margin-top: 24px;
-}
-
-.log-section h2 {
-  font-size: 22px;
-}
-
-#logArea {
-  background: #111;
-  color: #b9ffb9;
-  text-align: left;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 12px;
-  line-height: 1.4;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-/* 読み込み中ブロック */
-.loading-blocker {
-  position: fixed;
-  inset: 0;
-  display: none;
-  background: rgba(255,255,255,0.35);
-  z-index: 9999;
-}
-
-body.is-loading .loading-blocker {
-  display: block;
-}
-
-.main-layout {
-  display: grid;
-  grid-template-columns: 0.9fr 1.4fr;
-  gap: 18px;
-  align-items: start;
-  margin-top: 18px;
-}
-
-.result-section,
-.chart-section {
-  margin-top: 0;
-}
-
-.chart-section {
-  position: sticky;
-  top: 12px;
-}
-
-@media (max-width: 760px) {
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .chart-section {
-    position: static;
-  }
-}
-
-/* 左下バージョン */
-.version-text {
-  position: fixed;
-  left: 10px;
-  bottom: 10px;
-  font-size: 11px;
-  color: #999;
-  background: rgba(255,255,255,0.85);
-  padding: 4px 6px;
-  border-radius: 6px;
-  z-index: 10000;
-}
+/* 001 */ /* 株ツリー */
+/* 002 */ 
+/* 003 */ body {
+/* 004 */   margin: 0;
+/* 005 */   font-family: sans-serif;
+/* 006 */   background: linear-gradient(180deg, #f3f7f1 0%, #f7f8fa 260px);
+/* 007 */   color: #1f1f1f;
+/* 008 */ }
+/* 009 */ 
+/* 010 */ .app {
+/* 011 */   max-width: 980px;
+/* 012 */   margin: 0 auto;
+/* 013 */   padding: 4px 14px 80px;
+/* 014 */   text-align: center;
+/* 015 */ }
+/* 016 */ 
+/* 017 */ .notice-box {
+/* 018 */   margin: 0 auto 8px;
+/* 019 */   max-width: 720px;
+/* 020 */   color: #666;
+/* 021 */   font-size: 10px;
+/* 022 */   line-height: 1.1;
+/* 023 */   text-align: left;
+/* 024 */ }
+/* 025 */ 
+/* 026 */ .notice-box p {
+/* 027 */   margin: 0;
+/* 028 */   line-height: 1.1;
+/* 029 */ }
+/* 030 */ 
+/* 031 */ .app-header {
+/* 032 */   margin: 0 -14px 16px;
+/* 033 */   padding: 22px 14px 16px;
+/* 034 */   background:
+/* 035 */     radial-gradient(circle at 10% 20%, rgba(35,120,60,0.16), transparent 28%),
+/* 036 */     radial-gradient(circle at 90% 10%, rgba(35,120,60,0.12), transparent 30%),
+/* 037 */     linear-gradient(180deg, #ffffff 0%, #eef7ed 100%);
+/* 038 */   border-bottom: 1px solid rgba(0,0,0,0.08);
+/* 039 */   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+/* 040 */ }
+/* 041 */ 
+/* 042 */ .app-title {
+/* 043 */   margin: 8px 0 4px;
+/* 044 */   font-size: 40px;
+/* 045 */   font-weight: 900;
+/* 046 */   letter-spacing: 2px;
+/* 047 */   color: #12351c;
+/* 048 */   text-shadow: 0 4px 10px rgba(0,0,0,0.16);
+/* 049 */ }
+/* 050 */ 
+/* 051 */ .app-title::after {
+/* 052 */   content: "STOCK SCANNER";
+/* 053 */   display: block;
+/* 054 */   margin-top: 4px;
+/* 055 */   font-size: 11px;
+/* 056 */   letter-spacing: 5px;
+/* 057 */   color: #2f6b38;
+/* 058 */   font-weight: 700;
+/* 059 */ }
+/* 060 */ 
+/* 061 */ .filters {
+/* 062 */   display: flex;
+/* 063 */   flex-wrap: wrap;
+/* 064 */   justify-content: center;
+/* 065 */   gap: 8px;
+/* 066 */   margin: 18px 0;
+/* 067 */ }
+/* 068 */ 
+/* 069 */ .show-button {
+/* 070 */   width: auto;
+/* 071 */   min-width: 92px;
+/* 072 */   height: 42px;
+/* 073 */   padding: 0 16px;
+/* 074 */   font-size: 14px;
+/* 075 */   border: none;
+/* 076 */   border-radius: 999px;
+/* 077 */   background: #fff;
+/* 078 */   color: #222;
+/* 079 */   font-weight: 700;
+/* 080 */   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+/* 081 */ }
+/* 082 */ 
+/* 083 */ .show-button.active {
+/* 084 */   background: #0b8f3a;
+/* 085 */   color: #fff;
+/* 086 */ }
+/* 087 */ 
+/* 088 */ .sub-filters {
+/* 089 */   display: none;
+/* 090 */   flex-wrap: wrap;
+/* 091 */   justify-content: center;
+/* 092 */   gap: 8px;
+/* 093 */   margin: -6px 0 18px;
+/* 094 */ }
+/* 095 */ 
+/* 096 */ .sub-filters.show {
+/* 097 */   display: flex;
+/* 098 */ }
+/* 099 */ 
+/* 100 */ .sub-button {
+/* 101 */   padding: 7px 12px;
+/* 102 */   font-size: 12px;
+/* 103 */   border: none;
+/* 104 */   border-radius: 999px;
+/* 105 */   background: #e8eee8;
+/* 106 */   color: #234;
+/* 107 */   font-weight: 700;
+/* 108 */ }
+/* 109 */ 
+/* 110 */ .sub-button.active {
+/* 111 */   background: #0b8f3a;
+/* 112 */   color: #fff;
+/* 113 */ }
+/* 114 */ 
+/* 115 */ .main-layout {
+/* 116 */   display: grid;
+/* 117 */   grid-template-columns: 1fr;
+/* 118 */   gap: 16px;
+/* 119 */   margin-top: 18px;
+/* 120 */ }
+/* 121 */ 
+/* 122 */ .result-section {
+/* 123 */   margin-top: 0;
+/* 124 */ }
+/* 125 */ 
+/* 126 */ .result-section h2 {
+/* 127 */   font-size: 24px;
+/* 128 */   margin: 14px 0 16px;
+/* 129 */   font-weight: 900;
+/* 130 */ }
+/* 131 */ 
+/* 132 */ #resultList {
+/* 133 */   list-style: none;
+/* 134 */   margin: 0;
+/* 135 */   padding: 0;
+/* 136 */   display: grid;
+/* 137 */   grid-template-columns: repeat(4, 1fr);
+/* 138 */   gap: 8px;
+/* 139 */ }
+/* 140 */ 
+/* 141 */ #resultList li {
+/* 142 */   background: #fff;
+/* 143 */   padding: 8px 4px;
+/* 144 */   border-radius: 12px;
+/* 145 */   cursor: pointer;
+/* 146 */   text-align: center;
+/* 147 */   min-height: 54px;
+/* 148 */   display: flex;
+/* 149 */   flex-direction: column;
+/* 150 */   justify-content: center;
+/* 151 */   align-items: center;
+/* 152 */   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+/* 153 */ }
+/* 154 */ 
+/* 155 */ #resultList li:active {
+/* 156 */   transform: scale(0.98);
+/* 157 */ }
+/* 158 */ 
+/* 159 */ .stock-code {
+/* 160 */   font-size: 18px;
+/* 161 */   font-weight: 800;
+/* 162 */   line-height: 1;
+/* 163 */ }
+/* 164 */ 
+/* 165 */ .stock-name {
+/* 166 */   font-size: 10px;
+/* 167 */   margin-top: 3px;
+/* 168 */   color: #555;
+/* 169 */ }
+/* 170 */ 
+/* 171 */ .chart-section {
+/* 172 */   margin-top: 0;
+/* 173 */   background: #fff;
+/* 174 */   border-radius: 14px;
+/* 175 */   padding: 14px;
+/* 176 */   box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+/* 177 */ }
+/* 178 */ 
+/* 179 */ .chart-section h2 {
+/* 180 */   margin-top: 0;
+/* 181 */   font-size: 20px;
+/* 182 */   font-weight: 900;
+/* 183 */ }
+/* 184 */ 
+/* 185 */ canvas {
+/* 186 */   max-width: 100%;
+/* 187 */ }
+/* 188 */ 
+/* 189 */ .inline-chart-wrapper {
+/* 190 */   list-style: none;
+/* 191 */   grid-column: 1 / -1;
+/* 192 */   width: 100%;
+/* 193 */   padding: 0;
+/* 194 */   margin: 12px 0;
+/* 195 */   background: transparent;
+/* 196 */   box-shadow: none;
+/* 197 */   border-radius: 0;
+/* 198 */ }
+/* 199 */ 
+/* 200 */ .inline-chart-wrapper .chart-section {
+/* 201 */   width: 100%;
+/* 202 */   max-width: 760px;
+/* 203 */   margin: 0 auto;
+/* 204 */   padding: 14px;
+/* 205 */   box-sizing: border-box;
+/* 206 */ }
+/* 207 */ 
+/* 208 */ .inline-chart-wrapper canvas {
+/* 209 */   width: 100% !important;
+/* 210 */   max-width: 100%;
+/* 211 */   height: 260px !important;
+/* 212 */ }
+/* 213 */ 
+/* 214 */ .log-section {
+/* 215 */   margin-top: 24px;
+/* 216 */ }
+/* 217 */ 
+/* 218 */ .log-section h2 {
+/* 219 */   font-size: 22px;
+/* 220 */ }
+/* 221 */ 
+/* 222 */ #logArea {
+/* 223 */   background: #111;
+/* 224 */   color: #b9ffb9;
+/* 225 */   text-align: left;
+/* 226 */   padding: 12px;
+/* 227 */   border-radius: 10px;
+/* 228 */   font-size: 12px;
+/* 229 */   line-height: 1.4;
+/* 230 */   max-height: 180px;
+/* 231 */   overflow-y: auto;
+/* 232 */ }
+/* 233 */ 
+/* 234 */ .loading-blocker {
+/* 235 */   position: fixed;
+/* 236 */   inset: 0;
+/* 237 */   display: none;
+/* 238 */   background: rgba(255,255,255,0.35);
+/* 239 */   z-index: 9999;
+/* 240 */ }
+/* 241 */ 
+/* 242 */ body.is-loading .loading-blocker {
+/* 243 */   display: block;
+/* 244 */ }
+/* 245 */ 
+/* 246 */ .version-text {
+/* 247 */   position: fixed;
+/* 248 */   left: 10px;
+/* 249 */   bottom: 10px;
+/* 250 */   font-size: 11px;
+/* 251 */   color: #999;
+/* 252 */   background: rgba(255,255,255,0.85);
+/* 253 */   padding: 4px 6px;
+/* 254 */   border-radius: 6px;
+/* 255 */   z-index: 10000;
+/* 256 */ }
+/* 257 */ 
+/* 258 */ @media (min-width: 761px) {
+/* 259 */   .main-layout {
+/* 260 */     grid-template-columns: 0.9fr 1.4fr;
+/* 261 */     align-items: start;
+/* 262 */   }
+/* 263 */ }
+/* 264 */ 
+/* 265 */ @media (max-width: 430px) {
+/* 266 */   .app-title {
+/* 267 */     font-size: 34px;
+/* 268 */   }
+/* 269 */ 
+/* 270 */   .show-button {
+/* 271 */     min-width: 84px;
+/* 272 */     height: 40px;
+/* 273 */     padding: 0 12px;
+/* 274 */     font-size: 13px;
+/* 275 */   }
+/* 276 */ 
+/* 277 */   #resultList {
+/* 278 */     gap: 7px;
+/* 279 */   }
+/* 280 */ 
+/* 281 */   .stock-code {
+/* 282 */     font-size: 17px;
+/* 283 */   }
+/* 284 */ }
