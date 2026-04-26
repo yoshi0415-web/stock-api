@@ -311,3 +311,31 @@
 /* 307 */     display: none;
 /* 308 */   }
 /* 309 */ }
+
+/* 500 */ @media screen and (min-width: 760px) and (orientation: landscape),
+/* 501 */ screen and (min-width: 1024px) {
+/* 502 */   .main-layout {
+/* 503 */     display: grid !important;
+/* 504 */     grid-template-columns: 340px 1fr !important;
+/* 505 */     gap: 18px !important;
+/* 506 */     align-items: start;
+/* 507 */   }
+/* 508 */ 
+/* 509 */   .result-section {
+/* 510 */     grid-column: 1;
+/* 511 */   }
+/* 512 */ 
+/* 513 */   .chart-section {
+/* 514 */     grid-column: 2;
+/* 515 */     grid-row: 1;
+/* 516 */     margin-top: 0;
+/* 517 */   }
+/* 518 */ 
+/* 519 */   #resultList {
+/* 520 */     grid-template-columns: repeat(2, 1fr) !important;
+/* 521 */   }
+/* 522 */ 
+/* 523 */   .inline-chart-wrapper {
+/* 524 */     display: none !important;
+/* 525 */   }
+/* 526 */ }
