@@ -31,13 +31,34 @@ body {
 }
 
 /* タイトル */
+.app-header {
+  margin: 0 -14px 18px;
+  padding: 26px 14px 18px;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(35,120,60,0.18), transparent 28%),
+    radial-gradient(circle at 90% 10%, rgba(35,120,60,0.14), transparent 30%),
+    linear-gradient(180deg, #ffffff 0%, #eef7ed 100%);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
 .app-title {
-  margin: 8px 0 18px;
-  font-size: 38px;
+  margin: 8px 0 4px;
+  font-size: 42px;
   font-weight: 900;
-  letter-spacing: 2px;
-  color: #143d1f;
-  text-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  letter-spacing: 3px;
+  color: #12351c;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.18);
+}
+
+.app-title::after {
+  content: "STOCK SCANNER";
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: #2f6b38;
+  font-weight: 700;
 }
 
 /* 条件ボタンエリア */
@@ -234,6 +255,34 @@ canvas {
 
 body.is-loading .loading-blocker {
   display: block;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.4fr;
+  gap: 18px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+.result-section,
+.chart-section {
+  margin-top: 0;
+}
+
+.chart-section {
+  position: sticky;
+  top: 12px;
+}
+
+@media (max-width: 760px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-section {
+    position: static;
+  }
 }
 
 /* 左下バージョン */
