@@ -81,9 +81,8 @@
 /* 080 */ 
 /* 081 */     li.classList.add("selected-stock");
 /* 081-1 */ 
-/* 081-2 */     const isWideScreen = window.matchMedia(
-/* 081-3 */       "(min-width: 760px) and (orientation: landscape), (min-width: 1024px)"
-/* 081-4 */     ).matches;
+/* 081-2 */     const isWideScreen =
+/* 081-3 */       window.innerWidth > window.innerHeight || window.innerWidth >= 900;
 /* 081-5 */ 
 /* 081-6 */     if (isWideScreen) {
 /* 081-7 */       mainLayout.appendChild(chartSection);
