@@ -74,12 +74,26 @@
 /* 074 */     const old = document.querySelector(".inline-chart-wrapper");
 /* 075 */     if (old) old.remove();
 /* 076 */ 
-/* 077 */     const wrap = document.createElement("li");
-/* 078 */     wrap.className = "inline-chart-wrapper";
-/* 079 */     li.insertAdjacentElement("afterend", wrap);
-/* 080 */     wrap.appendChild(chartSection);
-/* 081 */   }
-/* 082 */ 
+/* 077 */     document.querySelectorAll("#resultList li").forEach(item => {
+/* 078 */       item.classList.remove("selected-stock");
+/* 079 */     });
+/* 080 */ 
+/* 081 */     li.classList.add("selected-stock");
+/* 081-1 */ 
+/* 081-2 */     const stockItems = Array.from(
+/* 081-3 */       document.querySelectorAll("#resultList li:not(.inline-chart-wrapper)")
+/* 081-4 */     );
+/* 081-5 */ 
+/* 081-6 */     const index = stockItems.indexOf(li);
+/* 081-7 */     const rowEndIndex =
+/* 081-8 */       Math.min(Math.floor(index / 4) * 4 + 3, stockItems.length - 1);
+/* 081-9 */     const rowEndItem = stockItems[rowEndIndex];
+/* 081-10 */ 
+/* 081-11 */     const wrap = document.createElement("li");
+/* 081-12 */     wrap.className = "inline-chart-wrapper";
+/* 081-13 */     rowEndItem.insertAdjacentElement("afterend", wrap);
+/* 081-14 */     wrap.appendChild(chartSection);
+/* 082 */   }
 /* 083 */   function createStockItem(code, label) {
 /* 084 */     const li = document.createElement("li");
 /* 085 */     const name = STOCK_NAMES[code] || "";
