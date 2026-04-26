@@ -286,3 +286,28 @@
 /* 282 */     font-size: 17px;
 /* 283 */   }
 /* 284 */ }
+/* 285 */ @media (min-width: 900px) {
+/* 286 */   .main-layout {
+/* 287 */     display: grid;
+/* 288 */     grid-template-columns: 0.85fr 1.35fr;
+/* 289 */     gap: 18px;
+/* 290 */     align-items: start;
+/* 291 */   }
+/* 292 */ 
+/* 293 */   .result-section {
+/* 294 */     grid-column: 1;
+/* 295 */   }
+/* 296 */ 
+/* 297 */   .chart-section {
+/* 298 */     grid-column: 2;
+/* 299 */     grid-row: 1;
+/* 300 */   }
+/* 301 */ 
+/* 302 */   #resultList {
+/* 303 */     grid-template-columns: repeat(2, 1fr);
+/* 304 */   }
+/* 305 */ 
+/* 306 */   .inline-chart-wrapper {
+/* 307 */     display: none;
+/* 308 */   }
+/* 309 */ }
