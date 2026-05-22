@@ -4,361 +4,187 @@
 /* 004 */   let currentRequestId = 0;
 /* 005 */   let lastRequestAt = 0;
 /* 006 */   const MIN_COOLDOWN_MS = 3000;
-/* 006-1 */   let currentStockData = null;
-/* 006-2 */   let currentCode = "";
-/* 006-3 */   let currentLabel = "";
-/* 006-4 */   let currentTimeframe = "daily";
-/* 007 */ 
-/* 008 */   const risingButton = document.getElementById("risingButton");
-/* 009 */   const fallingButton = document.getElementById("fallingButton");
-/* 010 */   const bullishButton = document.getElementById("bullishButton");
-/* 011 */   const volumeButton = document.getElementById("volumeButton");
-/* 012 */   const high25Button = document.getElementById("high25Button");
-/* 013 */ 
-/* 014 */   const resultList = document.getElementById("resultList");
-/* 015 */   const chartCanvas = document.getElementById("chart");
-/* 016 */   const chartTitle = document.getElementById("chartTitle");
-/* 017 */   const chartSection = document.querySelector(".chart-section");
-/* 017-1 */   const mainLayout = document.querySelector(".main-layout");
-/* 017-2 */   const dailyButton = document.getElementById("dailyButton");
-/* 017-3 */   const weeklyButton = document.getElementById("weeklyButton");
-/* 017-4 */   const monthlyButton = document.getElementById("monthlyButton");
-/* 018 */ 
-/* 019 */   const WATCH_CODES = [
-/* 020 */     "7203","6758","7974","9984","9432",
-/* 021 */     "8306","8316","8411","6501","6503",
-/* 022 */     "7011","7012","7013","8035","6857",
-/* 023 */     "9983","6098","4063","7267","8058",
-/* 024 */     "8001","8002","8031","8053","8766",
-/* 025 */     "8750","9101","9104","9107","5401",
-/* 026 */     "5406","5411","6301","6367","6146",
-/* 027 */     "7733","7741","7751","6902","6954",
-/* 028 */     "6981","6971","4661","4689","4755",
-/* 029 */     "9613","9020","9022","9201","9202"
-/* 030 */   ];
-/* 031 */ 
-/* 032 */   const STOCK_NAMES = {
-/* 033 */     "7203": "トヨタ",
-/* 034 */     "6758": "ソニーG",
-/* 035 */     "7974": "任天堂",
-/* 036 */     "9984": "SBG",
-/* 037 */     "9432": "NTT"
-/* 038 */   };
+/* 007 */   let currentStockData = null;
+/* 008 */   let currentCode = "";
+/* 009 */   let currentLabel = "";
+/* 010 */   let currentTimeframe = "daily";
+/* 011 */ 
+/* 012 */   const risingButton = document.getElementById("risingButton");
+/* 013 */   const fallingButton = document.getElementById("fallingButton");
+/* 014 */   const bullishButton = document.getElementById("bullishButton");
+/* 015 */   const volumeButton = document.getElementById("volumeButton");
+/* 016 */   const high25Button = document.getElementById("high25Button");
+/* 017 */ 
+/* 018 */   const resultList = document.getElementById("resultList");
+/* 019 */   const chartCanvas = document.getElementById("chart");
+/* 020 */   const chartTitle = document.getElementById("chartTitle");
+/* 021 */   const chartSection = document.querySelector(".chart-section");
+/* 022 */   const mainLayout = document.querySelector(".main-layout");
+/* 023 */   const dailyButton = document.getElementById("dailyButton");
+/* 024 */   const weeklyButton = document.getElementById("weeklyButton");
+/* 025 */   const monthlyButton = document.getElementById("monthlyButton");
+/* 026 */ 
+/* 027 */   const WATCH_CODES = [
+/* 028 */     "7203","6758","7974","9984","9432",
+/* 029 */     "8306","8316","8411","6501","6503",
+/* 030 */     "7011","7012","7013","8035","6857",
+/* 031 */     "9983","6098","4063","7267","8058",
+/* 032 */     "8001","8002","8031","8053","8766",
+/* 033 */     "8750","9101","9104","9107","5401",
+/* 034 */     "5406","5411","6301","6367","6146",
+/* 035 */     "7733","7741","7751","6902","6954",
+/* 036 */     "6981","6971","4661","4689","4755",
+/* 037 */     "9613","9020","9022","9201","9202"
+/* 038 */   ];
 /* 039 */ 
-/* 040 */   let allStocksCache = null;
-/* 041 */ 
-/* 042 */   async function getAllStocks() {
-/* 043 */     if (allStocksCache) return allStocksCache;
-/* 044 */ 
-/* 045 */     const response = await fetch("/stocks.json");
-/* 046 */     const data = await response.json();
+/* 040 */   const STOCK_NAMES = {
+/* 041 */     "7203": "トヨタ",
+/* 042 */     "6758": "ソニーG",
+/* 043 */     "7974": "任天堂",
+/* 044 */     "9984": "SBG",
+/* 045 */     "9432": "NTT"
+/* 046 */   };
 /* 047 */ 
-/* 048 */     allStocksCache = data;
-/* 049 */     return data;
-/* 050 */   }
-/* 051 */ 
-/* 052 */   function setActiveButton(activeButton) {
-/* 053 */     [risingButton, fallingButton, bullishButton, volumeButton].forEach(button => {
-/* 054 */       button.classList.remove("active");
-/* 055 */     });
-/* 056 */ 
-/* 057 */     activeButton.classList.add("active");
-/* 058 */   }
-/* 059 */ 
-/* 060 */   function hideHighSubFilters() {
-/* 061 */     document.getElementById("highSubFilters").classList.remove("show");
+/* 048 */   let allStocksCache = null;
+/* 049 */ 
+/* 050 */   async function getAllStocks() {
+/* 051 */     if (allStocksCache) return allStocksCache;
+/* 052 */     const res = await fetch("/stocks.json");
+/* 053 */     const data = await res.json();
+/* 054 */     allStocksCache = data;
+/* 055 */     return data;
+/* 056 */   }
+/* 057 */ 
+/* 058 */   function setActiveButton(activeButton) {
+/* 059 */     [risingButton, fallingButton, bullishButton, volumeButton]
+/* 060 */       .forEach(b => b.classList.remove("active"));
+/* 061 */     activeButton.classList.add("active");
 /* 062 */   }
 /* 063 */ 
-/* 064 */   function clearChart(titleText = "チャート") {
-/* 065 */     if (chart) {
-/* 066 */       chart.destroy();
-/* 067 */       chart = null;
-/* 068 */     }
-/* 069 */ 
+/* 064 */   function hideHighSubFilters() {
+/* 065 */     document.getElementById("highSubFilters").classList.remove("show");
+/* 066 */   }
+/* 067 */ 
+/* 068 */   function clearChart(titleText = "チャート") {
+/* 069 */     if (chart) chart.destroy();
 /* 070 */     chartTitle.textContent = titleText;
 /* 071 */   }
 /* 072 */ 
-/* 073 */   function moveChartUnderItem(li) {
-/* 074 */     const old = document.querySelector(".inline-chart-wrapper");
-/* 075 */     if (old) old.remove();
+/* 073 */   function groupWeekly(data) {
+/* 074 */     return data.filter((_, i) => i % 5 === 0);
+/* 075 */   }
 /* 076 */ 
-/* 077 */     document.querySelectorAll("#resultList li").forEach(item => {
-/* 078 */       item.classList.remove("selected-stock");
-/* 079 */     });
+/* 077 */   function groupMonthly(data) {
+/* 078 */     return data.filter((_, i) => i % 20 === 0);
+/* 079 */   }
 /* 080 */ 
-/* 081 */     li.classList.add("selected-stock");
-/* 081-1 */ 
-/* 081-2 */     const isWideScreen =
-/* 081-3 */       window.innerWidth > window.innerHeight || window.innerWidth >= 900;
-/* 081-5 */ 
-/* 081-6 */     if (isWideScreen) {
-/* 081-7 */       mainLayout.appendChild(chartSection);
-/* 081-8 */       return;
-/* 081-9 */     }
-/* 081-10 */ 
-/* 081-11 */     const stockItems = Array.from(
-/* 081-12 */       document.querySelectorAll("#resultList li:not(.inline-chart-wrapper)")
-/* 081-13 */     );
-/* 081-14 */ 
-/* 081-15 */     const index = stockItems.indexOf(li);
-/* 081-16 */     const rowEndIndex =
-/* 081-17 */       Math.min(Math.floor(index / 4) * 4 + 3, stockItems.length - 1);
-/* 081-18 */     const rowEndItem = stockItems[rowEndIndex];
-/* 081-19 */ 
-/* 081-20 */     const wrap = document.createElement("li");
-/* 081-21 */     wrap.className = "inline-chart-wrapper";
-/* 081-22 */     rowEndItem.insertAdjacentElement("afterend", wrap);
-/* 081-23 */     wrap.appendChild(chartSection);
-/* 082 */   }
-/* 083 */   function createStockItem(code, label) {
-/* 084 */     const li = document.createElement("li");
-/* 085 */     const name = STOCK_NAMES[code] || "";
+/* 081 */   function updateTimeframeButtons(active) {
+/* 082 */     [dailyButton, weeklyButton, monthlyButton]
+/* 083 */       .forEach(b => b.classList.remove("active"));
+/* 084 */     active.classList.add("active");
+/* 085 */   }
 /* 086 */ 
-li.innerHTML = `
-<span class="stock-code">${code}</span>
-<span class="stock-name">${name}</span>
-`;
+/* 087 */   function redrawChartByTimeframe() {
+/* 088 */     if (!currentStockData) return;
+/* 089 */ 
+/* 090 */     let data = currentStockData;
 /* 091 */ 
-/* 092 */     li.addEventListener("click", async () => {
-/* 093 */       moveChartUnderItem(li);
-/* 094 */ 
-/* 095 */       const allStocks = await getAllStocks();
-/* 096 */       const stock = allStocks[code];
-/* 096-1 */ 
-/* 096-2 */       if (!stock || !stock.data || stock.data.length === 0) return;
-/* 096-3 */ 
-/* 096-4 */       currentStockData = stock.data;
-/* 096-5 */       currentCode = code;
-/* 096-6 */       currentLabel = label;
-/* 096-7 */       currentTimeframe = "daily";
-/* 096-8 */ 
-/* 097 */       updateTimeframeButtons(dailyButton);
-/* 098 */
+/* 092 */     if (currentTimeframe === "weekly") {
+/* 093 */       data = groupWeekly(data);
+/* 094 */     }
+/* 095 */ 
+/* 096 */     if (currentTimeframe === "monthly") {
+/* 097 */       data = groupMonthly(data);
+/* 098 */     }
 /* 099 */ 
-/* 100 */       const labels = stock.data.map(item => item.Date);
-/* 101 */       const closePrices = stock.data.map(item => item.C);
+/* 100 */     drawChart(currentCode, currentLabel, data);
+/* 101 */   }
 /* 102 */ 
-/* 103 */       drawChart(code, label, labels, closePrices);
-/* 104 */     });
+/* 103 */   function drawChart(code, label, data) {
+/* 104 */     if (chart) chart.destroy();
 /* 105 */ 
-/* 106 */     return li;
-/* 107 */   }
+/* 106 */     const labels = data.map(d => d.Date);
+/* 107 */     const prices = data.map(d => d.C);
 /* 108 */ 
-/* 109 */   function showStockList(codes, label) {
-/* 110 */     resultList.innerHTML = "";
-/* 111 */ 
-/* 112 */     for (const code of codes) {
-/* 113 */       resultList.appendChild(createStockItem(code, label));
-/* 114 */     }
-/* 115 */   }
-/* 116 */ 
-/* 117 */   async function showFilteredStocks(label, judgeFunction) {
-/* 118 */     resultList.innerHTML = "";
-/* 119 */ 
-/* 120 */     const allStocks = await getAllStocks();
-/* 121 */ 
-/* 122 */     for (const code of WATCH_CODES) {
-/* 123 */       const stock = allStocks[code];
-/* 124 */       if (!stock || !stock.data || stock.data.length < 3) continue;
-/* 125 */ 
-/* 126 */       if (judgeFunction(stock.data)) {
-/* 127 */         resultList.appendChild(createStockItem(code, label));
-/* 128 */       }
-/* 129 */     }
-/* 130 */ 
-/* 131 */     if (resultList.children.length === 0) {
-/* 132 */       resultList.innerHTML = "<li>該当なし</li>";
-/* 133 */       clearChart(`${label} : 該当なし`);
-/* 134 */     } else {
-/* 135 */       chartTitle.textContent = label;
-/* 136 */     }
-/* 137 */   }
-/* 138 */ 
-/* 139 */   risingButton.addEventListener("click", async () => {
-/* 140 */     hideHighSubFilters();
-/* 141 */     setActiveButton(risingButton);
-/* 142 */     clearChart("赤三兵");
-/* 143 */     await showFilteredStocks("赤三兵", isRedThreeSoldiers);
-/* 144 */   });
-/* 145 */ 
-/* 146 */   fallingButton.addEventListener("click", async () => {
-/* 147 */     hideHighSubFilters();
-/* 148 */     setActiveButton(fallingButton);
-/* 149 */     clearChart("三羽烏");
-/* 150 */     await showFilteredStocks("三羽烏", isThreeBlackCrows);
-/* 151 */   });
-/* 152 */ 
-/* 153 */   bullishButton.addEventListener("click", () => {
-/* 154 */     hideHighSubFilters();
-/* 155 */     setActiveButton(bullishButton);
-/* 156 */     clearChart("出来高急増");
-/* 157 */     showStockList(WATCH_CODES, "出来高急増");
-/* 158 */   });
-/* 159 */ 
-/* 160 */   volumeButton.addEventListener("click", () => {
-/* 161 */     setActiveButton(volumeButton);
-/* 162 */     clearChart("高値更新");
-/* 163 */     resultList.innerHTML = "";
-/* 164 */     document.getElementById("highSubFilters").classList.add("show");
-/* 165 */   });
-/* 166 */   high25Button.addEventListener("click", async () => {
-/* 167 */     clearChart("高値更新 25日");
-/* 168 */     await showFilteredStocks("高値更新 25日", isBreakHigh25);
-/* 169 */   });
-/* 170 */ 
-/* 171 */   function drawChart(code, label, labels, closePrices) {
-/* 170-1 */   function groupWeekly(data) {
-/* 170-2 */     const result = [];
-/* 170-3 */     let currentWeek = null;
-/* 170-4 */     let candle = null;
-/* 170-5 */ 
-/* 170-6 */     for (const item of data) {
-/* 170-7 */       const date = new Date(item.Date);
-/* 170-8 */ 
-/* 170-9 */       const weekKey =
-/* 170-10 */         `${date.getFullYear()}-${Math.floor(date.getDate() / 7)}-${date.getMonth()}`;
-/* 170-11 */ 
-/* 170-12 */       if (weekKey !== currentWeek) {
-/* 170-13 */         if (candle) result.push(candle);
-/* 170-14 */ 
-/* 170-15 */         currentWeek = weekKey;
-/* 170-16 */ 
-/* 170-17 */         candle = {
-/* 170-18 */           Date: item.Date,
-/* 170-19 */           O: item.O,
-/* 170-20 */           H: item.H,
-/* 170-21 */           L: item.L,
-/* 170-22 */           C: item.C
-/* 170-23 */         };
-/* 170-24 */ 
-/* 170-25 */       } else {
-/* 170-26 */         candle.H = Math.max(candle.H, item.H);
-/* 170-27 */         candle.L = Math.min(candle.L, item.L);
-/* 170-28 */         candle.C = item.C;
-/* 170-29 */       }
-/* 170-30 */     }
-/* 170-31 */ 
-/* 170-32 */     if (candle) result.push(candle);
-/* 170-33 */ 
-/* 170-34 */     return result;
-/* 170-35 */   }
-/* 170-36 */ 
-/* 170-37 */   function groupMonthly(data) {
-/* 170-38 */     const result = [];
-/* 170-39 */     let currentMonth = null;
-/* 170-40 */     let candle = null;
-/* 170-41 */ 
-/* 170-42 */     for (const item of data) {
-/* 170-43 */       const date = new Date(item.Date);
-/* 170-44 */       const monthKey =
-/* 170-45 */         `${date.getFullYear()}-${date.getMonth()}`;
-/* 170-46 */ 
-/* 170-47 */       if (monthKey !== currentMonth) {
-/* 170-48 */         if (candle) result.push(candle);
-/* 170-49 */ 
-/* 170-50 */         currentMonth = monthKey;
-/* 170-51 */ 
-/* 170-52 */         candle = {
-/* 170-53 */           Date: item.Date,
-/* 170-54 */           O: item.O,
-/* 170-55 */           H: item.H,
-/* 170-56 */           L: item.L,
-/* 170-57 */           C: item.C
-/* 170-58 */         };
-/* 170-59 */ 
-/* 170-60 */       } else {
-/* 170-61 */         candle.H = Math.max(candle.H, item.H);
-/* 170-62 */         candle.L = Math.min(candle.L, item.L);
-/* 170-63 */         candle.C = item.C;
-/* 170-64 */       }
-/* 170-65 */     }
-/* 170-66 */ 
-/* 170-67 */     if (candle) result.push(candle);
-/* 170-68 */ 
-/* 170-69 */     return result;
-/* 170-70 */   }
-/* 170-70 */   }
-/* 170-70-1 */ 
-/* 170-70-2 */   function groupWeekly(data) {
-/* 170-70-3 */     return data.filter((_, index) => index % 5 === 0);
-/* 170-70-4 */   }
-/* 170-70-5 */ 
-/* 170-70-6 */   function groupMonthly(data) {
-/* 170-70-7 */     return data.filter((_, index) => index % 20 === 0);
-/* 170-70-8 */   }
-/* 170-71 */   function updateTimeframeButtons(activeButton) {
-/* 170-71 */   function updateTimeframeButtons(activeButton) {
-/* 170-72 */     [dailyButton, weeklyButton, monthlyButton]
-/* 170-73 */       .forEach(button => button.classList.remove("active"));
-/* 170-74 */ 
-/* 170-75 */     activeButton.classList.add("active");
-/* 170-76 */   }
-/* 170-77 */ 
-/* 170-78 */   function redrawChartByTimeframe() {
-/* 170-79 */     if (!currentStockData) return;
-/* 170-80 */ 
-/* 170-81 */     let targetData = currentStockData;
-/* 170-82 */ 
-/* 170-83 */     if (currentTimeframe === "weekly") {
-/* 170-84 */       targetData = groupWeekly(currentStockData);
-/* 170-85 */     }
-/* 170-86 */ 
-/* 170-87 */     if (currentTimeframe === "monthly") {
-/* 170-88 */       targetData = groupMonthly(currentStockData);
-/* 170-89 */     }
-/* 170-90 */ 
-/* 170-91 */     const labels = targetData.map(item => item.Date);
-/* 170-92 */     const closePrices = targetData.map(item => item.C);
-/* 170-93 */ 
-/* 170-94 */     drawChart(
-/* 170-95 */       currentCode,
-/* 170-96 */       currentLabel,
-/* 170-97 */       labels,
-/* 170-98 */       closePrices
-/* 170-99 */   function redrawChartByTimeframe() {
-/* 170-100 */     if (!currentStockData) return;
-/* 170-101 */ 
-/* 170-102 */     let targetData = currentStockData;
-/* 170-103 */ 
-/* 170-104 */     if (currentTimeframe === "weekly") {
-/* 170-105 */       targetData = groupWeekly(currentStockData);
-/* 170-106 */     }
-/* 170-107 */ 
-/* 170-108 */     if (currentTimeframe === "monthly") {
-/* 170-109 */       targetData = groupMonthly(currentStockData);
-/* 170-110 */     }
-/* 170-111 */ 
-/* 170-112 */     const labels = targetData.map(item => item.Date);
-/* 170-113 */     const closePrices = targetData.map(item => item.C);
-/* 170-114 */ 
-/* 170-115 */     drawChart(
-/* 170-116 */       currentCode,
-/* 170-117 */       currentLabel,
-/* 170-118 */       labels,
-/* 170-119 */       closePrices
-/* 170-120 */     );
-/* 170-121 */   }
-/* 172 */     if (chart) chart.destroy();
-/* 173 */ 
-/* 174 */     chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
-/* 175 */ 
-/* 176 */     chart = new Chart(chartCanvas, {
-/* 177 */       type: "line",
-/* 178 */       data: {
-/* 179 */         labels: labels,
-/* 180 */         datasets: [{
-/* 181 */           label: code,
-/* 182 */           data: closePrices,
-/* 183 */           borderWidth: 2,
-/* 184 */           tension: 0.2
-/* 185 */         }]
-/* 186 */       },
-/* 187 */       options: {
-/* 188 */         responsive: true,
-/* 189 */         maintainAspectRatio: true
-/* 190 */       }
-/* 191 */     });
-/* 192 */   }
-/* 193 */ 
-/* 194 */   logCondition("script.js 読み込み完了");
-/* 195 */ });
+/* 109 */     chartTitle.textContent =
+/* 110 */       `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
+    
+/* 111 */     chart = new Chart(chartCanvas, {
+/* 112 */       type: "line",
+/* 113 */       data: {
+/* 114 */         labels,
+/* 115 */         datasets: [{
+/* 116 */           label: code,
+/* 117 */           data: prices,
+/* 118 */           borderWidth: 2,
+/* 119 */           tension: 0.2
+/* 120 */         }]
+/* 121 */       },
+/* 122 */       options: {
+/* 123 */         responsive: true,
+/* 124 */         maintainAspectRatio: true
+/* 125 */       }
+/* 126 */     });
+/* 127 */   }
+/* 128 */ 
+/* 129 */   function moveChartUnderItem(li) {
+/* 130 */     const old = document.querySelector(".inline-chart-wrapper");
+/* 131 */     if (old) old.remove();
+/* 132 */ 
+/* 133 */     document.querySelectorAll("#resultList li")
+/* 134 */       .forEach(i => i.classList.remove("selected-stock"));
+/* 135 */ 
+/* 136 */     li.classList.add("selected-stock");
+/* 137 */ 
+/* 138 */     const isWide =
+/* 139 */       window.innerWidth > window.innerHeight ||
+/* 140 */       window.innerWidth >= 900;
+/* 141 */ 
+/* 142 */     if (isWide) {
+/* 143 */       mainLayout.appendChild(chartSection);
+/* 144 */       return;
+/* 145 */     }
+/* 146 */ 
+/* 147 */     const items = Array.from(document.querySelectorAll("#resultList li"));
+/* 148 */     const index = items.indexOf(li);
+/* 149 */     const rowEnd = Math.min(Math.floor(index / 4) * 4 + 3, items.length - 1);
+/* 150 */ 
+/* 151 */     const wrap = document.createElement("li");
+/* 152 */     wrap.className = "inline-chart-wrapper";
+/* 153 */     items[rowEnd].insertAdjacentElement("afterend", wrap);
+/* 154 */     wrap.appendChild(chartSection);
+/* 155 */   }
+/* 156 */ 
+/* 157 */   function createStockItem(code, label) {
+/* 158 */     const li = document.createElement("li");
+/* 159 */     const name = STOCK_NAMES[code] || "";
+/* 160 */ 
+/* 161 */     li.innerHTML =
+/* 162 */       `<span class="stock-code">${code}</span>
+/* 163 */        <span class="stock-name">${name}</span>`;
+/* 164 */ 
+/* 165 */     li.addEventListener("click", async () => {
+/* 166 */       moveChartUnderItem(li);
+/* 167 */ 
+/* 168 */       const all = await getAllStocks();
+/* 169 */       const stock = all[code];
+/* 170 */       if (!stock?.data?.length) return;
+/* 171 */ 
+/* 172 */       currentStockData = stock.data;
+/* 173 */       currentCode = code;
+/* 174 */       currentLabel = label;
+/* 175 */       currentTimeframe = "daily";
+/* 176 */ 
+/* 177 */       updateTimeframeButtons(dailyButton);
+/* 178 */       drawChart(code, label, stock.data);
+/* 179 */     });
+/* 180 */ 
+/* 181 */     return li;
+/* 182 */   }
+/* 183 */ 
+/* 184 */   function showStockList(codes, label) {
+/* 185 */     resultList.innerHTML = "";
+/* 186 */     codes.forEach(c => resultList.appendChild(createStockItem(c, label)));
+/* 187 */   }
+/* 188 */ 
+/* 189 */ });
