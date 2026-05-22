@@ -1,36 +1,24 @@
 /* 001 */ const fs = require("fs");
 /* 002 */ 
-/* 003 */ const MAX_DATE = "2026-01-31";
-/* 004 */ 
-/* 005 */ const WATCH_CODES = [
-/* 006 */   "7203","6758","7974","9984","9432",
-/* 007 */   "8306","8316","8411","6501","6503",
-/* 007-1 */ "7011","7012","7013","8035","6857",
-/* 007-2 */ "9983","6098","4063","7267","8058"
-/* 007-3 */ ];
-/* 008 */ 
-/* 009 */ function wait(ms) {
-/* 010 */   return new Promise(resolve => setTimeout(resolve, ms));
-/* 011 */ }
-/* 012 */ 
-/* 013 */ function formatDate(date) {
-/* 014 */   const y = date.getFullYear();
-/* 015 */   const m = String(date.getMonth() + 1).padStart(2, "0");
-/* 016 */   const d = String(date.getDate()).padStart(2, "0");
-/* 017 */ 
-/* 018 */   return `${y}${m}${d}`;
-/* 019 */ }
-/* 020 */ 
-/* 021 */ function getDateRange() {
-/* 022 */   const to = new Date(MAX_DATE);
-/* 023 */   const from = new Date(MAX_DATE);
-/* 024 */ 
-/* 025 */   from.setDate(from.getDate() - 84);
-/* 026 */ 
-/* 027 */   return {
-/* 028 */     from: formatDate(from),
-/* 029 */     to: formatDate(to)
-/* 030 */   };
+/* 003 */ function formatDate(date) {
+/* 004 */   const y = date.getFullYear();
+/* 005 */   const m = String(date.getMonth() + 1).padStart(2, "0");
+/* 006 */   const d = String(date.getDate()).padStart(2, "0");
+/* 007 */ 
+/* 008 */   return `${y}${m}${d}`;
+/* 009 */ }
+/* 010 */ 
+/* 011 */ function getDateRange() {
+/* 012 */   const to = new Date();
+/* 013 */   const from = new Date();
+/* 014 */ 
+/* 015 */   from.setDate(from.getDate() - 84);
+/* 016 */ 
+/* 017 */   return {
+/* 018 */     from: formatDate(from),
+/* 019 */     to: formatDate(to)
+/* 020 */   };
+/* 021 */ }
 /* 031 */ }
 /* 032 */ 
 /* 033 */ async function fetchStock(apiKey, code) {
