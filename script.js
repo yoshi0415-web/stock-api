@@ -4,6 +4,10 @@
 /* 004 */   let currentRequestId = 0;
 /* 005 */   let lastRequestAt = 0;
 /* 006 */   const MIN_COOLDOWN_MS = 3000;
+/* 006-1 */   let currentStockData = null;
+/* 006-2 */   let currentCode = "";
+/* 006-3 */   let currentLabel = "";
+/* 006-4 */   let currentTimeframe = "daily";
 /* 007 */ 
 /* 008 */   const risingButton = document.getElementById("risingButton");
 /* 009 */   const fallingButton = document.getElementById("fallingButton");
