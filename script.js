@@ -20,6 +20,9 @@
 /* 016 */   const chartTitle = document.getElementById("chartTitle");
 /* 017 */   const chartSection = document.querySelector(".chart-section");
 /* 017-1 */   const mainLayout = document.querySelector(".main-layout");
+/* 017-2 */   const dailyButton = document.getElementById("dailyButton");
+/* 017-3 */   const weeklyButton = document.getElementById("weeklyButton");
+/* 017-4 */   const monthlyButton = document.getElementById("monthlyButton");
 /* 018 */ 
 /* 019 */   const WATCH_CODES = [
 /* 020 */     "7203","6758","7974","9984","9432",
@@ -266,6 +269,36 @@ li.innerHTML = `
 /* 170-68 */ 
 /* 170-69 */     return result;
 /* 170-70 */   }
+/* 170-71 */   function updateTimeframeButtons(activeButton) {
+/* 170-72 */     [dailyButton, weeklyButton, monthlyButton]
+/* 170-73 */       .forEach(button => button.classList.remove("active"));
+/* 170-74 */ 
+/* 170-75 */     activeButton.classList.add("active");
+/* 170-76 */   }
+/* 170-77 */ 
+/* 170-78 */   function redrawChartByTimeframe() {
+/* 170-79 */     if (!currentStockData) return;
+/* 170-80 */ 
+/* 170-81 */     let targetData = currentStockData;
+/* 170-82 */ 
+/* 170-83 */     if (currentTimeframe === "weekly") {
+/* 170-84 */       targetData = groupWeekly(currentStockData);
+/* 170-85 */     }
+/* 170-86 */ 
+/* 170-87 */     if (currentTimeframe === "monthly") {
+/* 170-88 */       targetData = groupMonthly(currentStockData);
+/* 170-89 */     }
+/* 170-90 */ 
+/* 170-91 */     const labels = targetData.map(item => item.Date);
+/* 170-92 */     const closePrices = targetData.map(item => item.C);
+/* 170-93 */ 
+/* 170-94 */     drawChart(
+/* 170-95 */       currentCode,
+/* 170-96 */       currentLabel,
+/* 170-97 */       labels,
+/* 170-98 */       closePrices
+/* 170-99 */     );
+/* 170-100 */   }
 /* 172 */     if (chart) chart.destroy();
 /* 173 */ 
 /* 174 */     chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
