@@ -9,16 +9,22 @@
 /* 009 */ }
 /* 010 */ 
 /* 011 */ function getDateRange() {
-/* 012 */   const to = new Date();
-/* 013 */   const from = new Date();
+/* 012 */   const limitDate = new Date("2026-02-27");
+/* 013 */   const today = new Date();
 /* 014 */ 
-/* 015 */   from.setDate(from.getDate() - 84);
-/* 016 */ 
-/* 017 */   return {
-/* 018 */     from: formatDate(from),
-/* 019 */     to: formatDate(to)
-/* 020 */   };
-/* 021 */ }
+/* 015 */   const to =
+/* 016 */     today > limitDate
+/* 017 */       ? limitDate
+/* 018 */       : today;
+/* 019 */ 
+/* 020 */   const from = new Date(to);
+/* 021 */   from.setDate(from.getDate() - 84);
+/* 021-1 */ 
+/* 021-2 */   return {
+/* 021-3 */     from: formatDate(from),
+/* 021-4 */     to: formatDate(to)
+/* 021-5 */   };
+/* 021-6 */ }
 /* 022 */ 
 /* 023 */ const WATCH_CODES = [
 /* 024 */   "7203","6758","7974","9984","9432",
