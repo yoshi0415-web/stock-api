@@ -125,14 +125,15 @@ li.innerHTML = `
 /* 095 */       const allStocks = await getAllStocks();
 /* 096 */       const stock = allStocks[code];
 /* 096-1 */ 
-/* 096-2 */       currentStockData = stock.data;
-/* 096-3 */       currentCode = code;
-/* 096-4 */       currentLabel = label;
-/* 096-5 */       currentTimeframe = "daily";
-/* 096-6 */ 
-/* 096-7 */       updateTimeframeButtons(dailyButton);
-/* 097 */ 
-/* 098 */       if (!stock || !stock.data || stock.data.length === 0) return;
+/* 096-2 */       if (!stock || !stock.data || stock.data.length === 0) return;
+/* 096-3 */ 
+/* 096-4 */       currentStockData = stock.data;
+/* 096-5 */       currentCode = code;
+/* 096-6 */       currentLabel = label;
+/* 096-7 */       currentTimeframe = "daily";
+/* 096-8 */ 
+/* 097 */       updateTimeframeButtons(dailyButton);
+/* 098 */
 /* 099 */ 
 /* 100 */       const labels = stock.data.map(item => item.Date);
 /* 101 */       const closePrices = stock.data.map(item => item.C);
