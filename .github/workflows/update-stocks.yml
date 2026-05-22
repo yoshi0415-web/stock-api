@@ -1,37 +1,38 @@
-/* 001 */ name: Update stocks data
-/* 002 */ 
-/* 003 */ on:
-/* 004 */   workflow_dispatch:
-/* 005 */ 
-/* 006 */   schedule:
-/* 007 */     - cron: "0 9 * * *"
-/* 008 */ 
-/* 009 */ permissions:
-/* 010 */   contents: write
-/* 011 */ 
-/* 012 */ jobs:
-/* 013 */   update-stocks:
-/* 014 */     runs-on: ubuntu-latest
-/* 015 */ 
-/* 016 */     steps:
-/* 017 */       - name: Checkout repository
-/* 018 */         uses: actions/checkout@v4
-/* 019 */ 
-/* 020 */       - name: Setup Node.js
-/* 021 */         uses: actions/setup-node@v4
-/* 022 */         with:
-/* 023 */           node-version: 20
-/* 024 */ 
-/* 025 */       - name: Run update script
-/* 026 */         env:
-/* 027 */           JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
-/* 028 */         run: node scripts/update-stocks.js
-/* 029 */ 
-/* 030 */       - name: Commit updated stocks.json
-/* 031 */         run: |
-/* 032 */           git config user.name "github-actions"
-/* 033 */           git config user.email "github-actions@github.com"
-/* 034 */           git add stocks.json
-/* 035 */           git commit -m "Update stocks.json" || echo "No changes"
-/* 036 */           git pull --rebase
-/* 037 */           git push
+name: Update stocks data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-stocks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run update script
+        env:
+          JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+        run: node scripts/update-stocks.js
+
+      - name: Commit updated stocks.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add stocks.json
+
+          git commit -m "Update stocks.json" || echo "No changes"
+
+          git pull --rebase
+
+          git push
