@@ -277,6 +277,16 @@ li.innerHTML = `
 /* 170-68 */ 
 /* 170-69 */     return result;
 /* 170-70 */   }
+/* 170-70 */   }
+/* 170-70-1 */ 
+/* 170-70-2 */   function groupWeekly(data) {
+/* 170-70-3 */     return data.filter((_, index) => index % 5 === 0);
+/* 170-70-4 */   }
+/* 170-70-5 */ 
+/* 170-70-6 */   function groupMonthly(data) {
+/* 170-70-7 */     return data.filter((_, index) => index % 20 === 0);
+/* 170-70-8 */   }
+/* 170-71 */   function updateTimeframeButtons(activeButton) {
 /* 170-71 */   function updateTimeframeButtons(activeButton) {
 /* 170-72 */     [dailyButton, weeklyButton, monthlyButton]
 /* 170-73 */       .forEach(button => button.classList.remove("active"));
