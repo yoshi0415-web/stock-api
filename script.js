@@ -192,6 +192,76 @@ li.innerHTML = `
 /* 169 */   });
 /* 170 */ 
 /* 171 */   function drawChart(code, label, labels, closePrices) {
+/* 170-1 */   function groupWeekly(data) {
+/* 170-2 */     const result = [];
+/* 170-3 */     let currentWeek = null;
+/* 170-4 */     let candle = null;
+/* 170-5 */ 
+/* 170-6 */     for (const item of data) {
+/* 170-7 */       const date = new Date(item.Date);
+/* 170-8 */ 
+/* 170-9 */       const weekKey =
+/* 170-10 */         `${date.getFullYear()}-${Math.floor(date.getDate() / 7)}-${date.getMonth()}`;
+/* 170-11 */ 
+/* 170-12 */       if (weekKey !== currentWeek) {
+/* 170-13 */         if (candle) result.push(candle);
+/* 170-14 */ 
+/* 170-15 */         currentWeek = weekKey;
+/* 170-16 */ 
+/* 170-17 */         candle = {
+/* 170-18 */           Date: item.Date,
+/* 170-19 */           O: item.O,
+/* 170-20 */           H: item.H,
+/* 170-21 */           L: item.L,
+/* 170-22 */           C: item.C
+/* 170-23 */         };
+/* 170-24 */ 
+/* 170-25 */       } else {
+/* 170-26 */         candle.H = Math.max(candle.H, item.H);
+/* 170-27 */         candle.L = Math.min(candle.L, item.L);
+/* 170-28 */         candle.C = item.C;
+/* 170-29 */       }
+/* 170-30 */     }
+/* 170-31 */ 
+/* 170-32 */     if (candle) result.push(candle);
+/* 170-33 */ 
+/* 170-34 */     return result;
+/* 170-35 */   }
+/* 170-36 */ 
+/* 170-37 */   function groupMonthly(data) {
+/* 170-38 */     const result = [];
+/* 170-39 */     let currentMonth = null;
+/* 170-40 */     let candle = null;
+/* 170-41 */ 
+/* 170-42 */     for (const item of data) {
+/* 170-43 */       const date = new Date(item.Date);
+/* 170-44 */       const monthKey =
+/* 170-45 */         `${date.getFullYear()}-${date.getMonth()}`;
+/* 170-46 */ 
+/* 170-47 */       if (monthKey !== currentMonth) {
+/* 170-48 */         if (candle) result.push(candle);
+/* 170-49 */ 
+/* 170-50 */         currentMonth = monthKey;
+/* 170-51 */ 
+/* 170-52 */         candle = {
+/* 170-53 */           Date: item.Date,
+/* 170-54 */           O: item.O,
+/* 170-55 */           H: item.H,
+/* 170-56 */           L: item.L,
+/* 170-57 */           C: item.C
+/* 170-58 */         };
+/* 170-59 */ 
+/* 170-60 */       } else {
+/* 170-61 */         candle.H = Math.max(candle.H, item.H);
+/* 170-62 */         candle.L = Math.min(candle.L, item.L);
+/* 170-63 */         candle.C = item.C;
+/* 170-64 */       }
+/* 170-65 */     }
+/* 170-66 */ 
+/* 170-67 */     if (candle) result.push(candle);
+/* 170-68 */ 
+/* 170-69 */     return result;
+/* 170-70 */   }
 /* 172 */     if (chart) chart.destroy();
 /* 173 */ 
 /* 174 */     chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
