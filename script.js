@@ -315,25 +315,29 @@ li.innerHTML = `
 /* 170-96 */       currentLabel,
 /* 170-97 */       labels,
 /* 170-98 */       closePrices
-/* 170-99 */     );
-/* 170-100 */   }
-/* 170-101 */   dailyButton.addEventListener("click", () => {
-/* 170-102 */     currentTimeframe = "daily";
-/* 170-103 */     updateTimeframeButtons(dailyButton);
-/* 170-104 */     redrawChartByTimeframe();
-/* 170-105 */   });
-/* 170-106 */ 
-/* 170-107 */   weeklyButton.addEventListener("click", () => {
-/* 170-108 */     currentTimeframe = "weekly";
-/* 170-109 */     updateTimeframeButtons(weeklyButton);
-/* 170-110 */     redrawChartByTimeframe();
-/* 170-111 */   });
-/* 170-112 */ 
-/* 170-113 */   monthlyButton.addEventListener("click", () => {
-/* 170-114 */     currentTimeframe = "monthly";
-/* 170-115 */     updateTimeframeButtons(monthlyButton);
-/* 170-116 */     redrawChartByTimeframe();
-/* 170-117 */   });
+/* 170-99 */   function redrawChartByTimeframe() {
+/* 170-100 */     if (!currentStockData) return;
+/* 170-101 */ 
+/* 170-102 */     let targetData = currentStockData;
+/* 170-103 */ 
+/* 170-104 */     if (currentTimeframe === "weekly") {
+/* 170-105 */       targetData = groupWeekly(currentStockData);
+/* 170-106 */     }
+/* 170-107 */ 
+/* 170-108 */     if (currentTimeframe === "monthly") {
+/* 170-109 */       targetData = groupMonthly(currentStockData);
+/* 170-110 */     }
+/* 170-111 */ 
+/* 170-112 */     const labels = targetData.map(item => item.Date);
+/* 170-113 */     const closePrices = targetData.map(item => item.C);
+/* 170-114 */ 
+/* 170-115 */     drawChart(
+/* 170-116 */       currentCode,
+/* 170-117 */       currentLabel,
+/* 170-118 */       labels,
+/* 170-119 */       closePrices
+/* 170-120 */     );
+/* 170-121 */   }
 /* 172 */     if (chart) chart.destroy();
 /* 173 */ 
 /* 174 */     chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
