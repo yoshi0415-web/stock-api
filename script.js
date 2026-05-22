@@ -306,6 +306,23 @@ li.innerHTML = `
 /* 170-98 */       closePrices
 /* 170-99 */     );
 /* 170-100 */   }
+/* 170-101 */   dailyButton.addEventListener("click", () => {
+/* 170-102 */     currentTimeframe = "daily";
+/* 170-103 */     updateTimeframeButtons(dailyButton);
+/* 170-104 */     redrawChartByTimeframe();
+/* 170-105 */   });
+/* 170-106 */ 
+/* 170-107 */   weeklyButton.addEventListener("click", () => {
+/* 170-108 */     currentTimeframe = "weekly";
+/* 170-109 */     updateTimeframeButtons(weeklyButton);
+/* 170-110 */     redrawChartByTimeframe();
+/* 170-111 */   });
+/* 170-112 */ 
+/* 170-113 */   monthlyButton.addEventListener("click", () => {
+/* 170-114 */     currentTimeframe = "monthly";
+/* 170-115 */     updateTimeframeButtons(monthlyButton);
+/* 170-116 */     redrawChartByTimeframe();
+/* 170-117 */   });
 /* 172 */     if (chart) chart.destroy();
 /* 173 */ 
 /* 174 */     chartTitle.textContent = `${label} : ${code} ${STOCK_NAMES[code] || ""}`;
