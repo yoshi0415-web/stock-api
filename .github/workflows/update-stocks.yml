@@ -3,6 +3,9 @@ name: Update stocks data
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "0 22 * * *"
+
 permissions:
   contents: write
 
